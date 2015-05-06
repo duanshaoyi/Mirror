@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @MappedSuperclass
 public class BaseEntity implements Serializable{
@@ -21,8 +23,20 @@ public class BaseEntity implements Serializable{
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Long id;
 	
-	@Column(insertable = true)
+	@Column(name="createAt",insertable = true)
+	@Temporal(TemporalType.TIMESTAMP)
 	public Timestamp createAt;
+	
+	public Timestamp getUpdateAt() {
+		return updateAt;
+	}
+
+	public void setUpdateAt(Timestamp updateAt) {
+		this.updateAt = updateAt;
+	}
+
+	@Column(name="updateAt",insertable = true)
+	public Timestamp updateAt;
 
 	public Long getId() {
 		return id;
