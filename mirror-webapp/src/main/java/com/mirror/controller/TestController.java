@@ -5,7 +5,6 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mirror.entity.User;
 import com.mirror.service.TestService;
 
 @RestController
@@ -18,7 +17,7 @@ public class TestController {
 	@RequestMapping("/bye")
 	public String bye(){
 		
-		System.out.println(testService.getUserByID(1));
-		return "bye";
+//		System.out.println(testService.getUserByID(Long.valueOf(1)));
+		return testService.getUserByID(Long.valueOf(1));
 	}
 }

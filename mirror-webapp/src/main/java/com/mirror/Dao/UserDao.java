@@ -1,6 +1,8 @@
 package com.mirror.Dao;
 
+import com.mirror.entity.User.User;;
 
-public interface UserDao {
-	public String getUserNameByID(int id);
+
+public interface UserDao extends BaseDao<User, Long>{
+//	public String getUserNameByID(Long id);
 }

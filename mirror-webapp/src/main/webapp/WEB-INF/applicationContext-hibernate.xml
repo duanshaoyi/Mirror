@@ -16,53 +16,52 @@
         ">
 
     <!-- Hibernate4 -->
-    <!-- 加载资源文件  其中包含变量信息，必须在Spring配置文件的最前面加载，即第一个加载-->
-    <context:property-placeholder location="/WEB-INF/persistence-mysql.properties" />
-    
-    <bean id="sessionFactory" 
-        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan">
-            <list>
-                <!-- 可以加多个包 -->
-                <value>com.mirror.entity</value>
-            </list>
-        </property>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <!--  <prop key="hibernate.current_session_context_class">thread</prop> --> 
-            </props>
-        </property>
-    </bean>
-    
-    <!-- 数据库映射 -->
-    <!--  class="org.apache.tomcat.dbcp.dbcp.BasicDataSource" -->
-    <!--  class="org.springframework.jdbc.datasource.DriverManagerDataSource" -->
+   <context:component-scan base-package="com.mirror.entity.*"/>
+   
+   <!-- 对标注@PersistenceContext的类经行增强，引入代理后的EntityManager实例 -->  
+   <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" /> 
+   
+   <!-- 对标注@Repository的类经行增强，将EntityManager异常转换为SpringDAO体系的异常 -->  
+   <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+   
+   <!-- 数据库映射 -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
       <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-      <property name="url" value="jdbc:mysql://localhost:3306/sy" />
+      <property name="url" value="jdbc:mysql://localhost:3306/mirror" />
       <property name="username" value="root" />
       <property name="password" value="root" />
    </bean>
    
-    <!-- 配置Hibernate事务管理器 -->
-    <bean id="transactionManager"
-        class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-      <property name="sessionFactory" ref="sessionFactory" />
-   </bean>
-   
-   <!-- 配置事务异常封装 -->
-   <bean id="persistenceExceptionTranslationPostProcessor"
-       class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
-   
+   <!-- JPA 实体管理工厂 -->  
+    <bean id="entityManagerFactory"  
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">  
+        <property name="persistenceXmlLocation" value="/WEB-INF/persistence.xml" />  
+        <!-- <property name="dataSource" ref="dataSource" /> -->  
+        <property name="persistenceUnitName" value="persistenceUnit" />  
+        <!-- <property name="jpaVendorAdapter">  
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">  
+                <property name="showSql" value="true" />  
+                <property name="generateDdl" value="true" />  
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect" />  
+            </bean>  
+        </property>   -->
+    </bean> 
+    
+    <!-- JPA 事务管理 -->  
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">  
+       <!--  <property name="dataSource" ref="dataSource" />   -->
+        <property name="entityManagerFactory" ref="entityManagerFactory" />  
+    </bean>
+         
    <!--  声明式容器事务管理 ,transaction-manager指定事务管理器为transactionManager -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="add*" propagation="REQUIRED" />
             <tx:method name="get*" propagation="REQUIRED" />
+            <tx:method name="find*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
             <tx:method name="*" read-only="true" />
         </tx:attributes>
     </tx:advice>

@@ -3,5 +3,5 @@ package com.mirror.service;
 
 public interface TestService {
 
-	public String getUserByID(int id);
+	public String getUserByID(Long id);
 }
