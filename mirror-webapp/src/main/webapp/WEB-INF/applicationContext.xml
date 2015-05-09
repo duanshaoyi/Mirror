@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"    
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd   
+        http://www.springframework.org/schema/beans    
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context    
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd"
+       default-autowire="byName">
+	
+	 <!-- 加载资源文件  其中包含变量信息，必须在Spring配置文件的最前面加载，即第一个加载-->
+    <context:property-placeholder location="/WEB-INF/persistence-mysql.properties" /> 
+	<!--配置Hibernate EntityManager注入  -->
+   <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+</beans>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        ">
+
+    <!-- Hibernate4 -->
+   <context:component-scan base-package="com.mirror.entity.*"/>
+   
+   <!-- 对标注@PersistenceContext的类经行增强，引入代理后的EntityManager实例 -->  
+   <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" /> 
+   
+   <!-- 对标注@Repository的类经行增强，将EntityManager异常转换为SpringDAO体系的异常 -->  
+   <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+   
+   <!-- 数据库映射 -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+      <property name="url" value="jdbc:mysql://localhost:3306/mirror" />
+      <property name="username" value="root" />
+      <property name="password" value="root" />
+   </bean>
+   
+   <!-- JPA 实体管理工厂 -->  
+    <bean id="entityManagerFactory"  
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">  
+        <property name="persistenceXmlLocation" value="/WEB-INF/persistence.xml" />  
+        <!-- <property name="dataSource" ref="dataSource" /> -->  
+        <property name="persistenceUnitName" value="persistenceUnit" />  
+        <!-- <property name="jpaVendorAdapter">  
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">  
+                <property name="showSql" value="true" />  
+                <property name="generateDdl" value="true" />  
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect" />  
+            </bean>  
+        </property>   -->
+    </bean> 
+    
+    <!-- JPA 事务管理 -->  
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">  
+       <!--  <property name="dataSource" ref="dataSource" />   -->
+        <property name="entityManagerFactory" ref="entityManagerFactory" />  
+    </bean>
+         
+   <!--  声明式容器事务管理 ,transaction-manager指定事务管理器为transactionManager -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="get*" propagation="REQUIRED" />
+            <tx:method name="find*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="*" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+    
+    <aop:config expose-proxy="true">
+        <!-- 只对业务逻辑层实施事务 -->
+        <aop:pointcut id="txPointcut" expression="execution(* com.mirror.service..*.*(..))" />
+        <!-- Advisor定义，切入点和通知分别为txPointcut、txAdvice -->
+        <aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice"/>
+    </aop:config>
+    
+</beans>
