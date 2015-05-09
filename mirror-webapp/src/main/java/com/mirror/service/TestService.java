@@ -3,5 +3,5 @@ package com.mirror.service;
 
 public interface TestService {
 
-	public String getUserByID(Long id);
+	public String getEmailByUserName(String userName);
 }

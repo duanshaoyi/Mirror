@@ -11,9 +11,10 @@ import com.mirror.entity.User.User;;
 @Transactional
 public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao{
 
-//	public String getUserNameByID(Long id){
-//		return entityManager.find(User.class, id).getUserName();
-//	}
+	public String getEmailByUserName(String userName){
+		String sql = "select Email from user a where a.nickname = :userName";
+		return this.entityManager.createNativeQuery(sql).setParameter("userName", userName).getSingleResult().toString();
+	}
 	
 
 }

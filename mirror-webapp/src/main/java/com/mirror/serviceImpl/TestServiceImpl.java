@@ -18,9 +18,8 @@ public class TestServiceImpl extends BaseServiceImpl<User, Long> implements Test
 
 
 	@Override
-	public String getUserByID(Long id) {
-		// TODO Auto-generated method stub
-		return userDao.find(id).getUserName();
+	public String getEmailByUserName(String userName){
+		return userDao.getEmailByUserName(userName);
 	}
 
 

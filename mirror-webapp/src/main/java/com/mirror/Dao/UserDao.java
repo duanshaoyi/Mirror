@@ -4,5 +4,5 @@ import com.mirror.entity.User.User;;
 
 
 public interface UserDao extends BaseDao<User, Long>{
-//	public String getUserNameByID(Long id);
+	public String getEmailByUserName(String userName);
 }
