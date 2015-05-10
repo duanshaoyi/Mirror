@@ -11,6 +11,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @MappedSuperclass
 public class BaseEntity implements Serializable{
 	
@@ -21,12 +23,12 @@ public class BaseEntity implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Long id;
+	public long ID;
 	
-	@Column(name="createAt", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP" , insertable = true)
+	@Column(name="create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP" , insertable = true)
 	public Timestamp createAt;
 	
-	@Column(name="updateAt" , columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" , insertable = true)
+	@Column(name="update_at" , columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" , insertable = true)
 	public Timestamp updateAt;
 	
 	public Timestamp getUpdateAt() {
@@ -37,12 +39,12 @@ public class BaseEntity implements Serializable{
 		this.updateAt = updateAt;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getID() {
+		return ID;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setID(Long ID) {
+		this.ID = ID;
 	}
 
 	public Timestamp getCreateAt() {

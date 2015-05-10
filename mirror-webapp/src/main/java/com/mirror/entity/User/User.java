@@ -21,36 +21,62 @@ public class User extends BaseEntity{
 	private static final long serialVersionUID = 1645625857955422208L;
 	
 	@Column(name = "nickname")
-	private String userName;
+	private String nickName;
 
 	@Column(name = "password")
 	private String password;
 	
-	@Column(name="Email")
-	private String Email;
+	@Column(name="email")
+	private String email;
 
-	@Column(name="locationId")
-	private Long locationId;
+	@Column(name="location_ID")
+	private long locationID;
 
 	//位置名称
-	@Column(name="locationName")
+	@Column(name="location_name")
 	private String locationName;
 
 	//头像路径
-	@Column(name="avatar")
-	private String icon;
+	@Column(name="iconpath")
+	private String iconPath;
 	
 	//个人描述
-	@Column(name="personalDesc")
-	private String desc;
+	@Column(name="personal_desc")
+	private String personalDesc;
 
-	@Column(name="signupDate",insertable = true)
+	@Column(name="signup_date",insertable = true)
 	@Temporal(TemporalType.DATE)
 	private Date signupDate;
 
-	@Column(name="isSignin", nullable=true)
-	private Integer Issignin;
+	@Column(name="is_signin", nullable=true)
+	private int isSignin;
 
+	@Column(name="douban_ID")
+	private long doubanID; 
+
+	@Column(name="douban_name")
+	private String doubanName;
+
+	@Column(name="weibo_ID")
+	private long weiboID; 
+
+	@Column(name="weibo_name")
+	private String weiboName;
+
+	//人群分类
+	@Column(name="crowd_type")
+	private int crowdType;
+	
+	@Column(name="placeHolder1")
+	private String placeHolder1;
+
+	@Column(name="placeHolder2")
+	private String placeHolder2;
+
+	
+	@Column(name="placeHolder3")
+	private String placeHolder3;
+	
 	public String getPlaceHolder1() {
 		return placeHolder1;
 	}
@@ -75,64 +101,40 @@ public class User extends BaseEntity{
 		this.placeHolder3 = placeHolder3;
 	}
 
-	@Column(name="doubanId")
-	private long doubanId; 
-
-	@Column(name="doubanName")
-	private String doubanName;
-
-	@Column(name="weiboId")
-	private long WeiboId; 
-
-	@Column(name="weiboName")
-	private String weiboName;
-
-	//人群分类
-	@Column(name="crowdType")
-	private int crowdType;
 	
-	@Column(name="placeHolder1")
-	private String placeHolder1;
-
-	@Column(name="placeHolder2")
-	private String placeHolder2;
-
-	
-	@Column(name="placeHolder3")
-	private String placeHolder3;
 
 	
 	public User(){
 		
 	}
 
-	public User(String userName, String password, String email,
-			long locationId, String locationName, String icon, String desc,
-			Date signupDate, int issignin, long doubanId,
-			String doubanName, long weiboId, String weiboName, int crowdType) {
+	public User(String nickName, String password, String email,
+			long locationID, String locationName, String icon, String personalDesc,
+			Date signupDate, int isSignin, long doubanID,
+			String doubanName, long weiboID, String weiboName, int crowdType) {
 		super();
-		this.userName = userName;
+		this.nickName = nickName;
 		this.password = password;
-		Email = email;
-		this.locationId = locationId;
+		this.email = email;
+		this.locationID = locationID;
 		this.locationName = locationName;
-		this.icon = icon;
-		this.desc = desc;
+		this.iconPath = icon;
+		this.personalDesc = personalDesc;
 		this.signupDate = signupDate;
-		Issignin = issignin;
-		this.doubanId = doubanId;
+		this.isSignin = isSignin;
+		this.doubanID = doubanID;
 		this.doubanName = doubanName;
-		WeiboId = weiboId;
+		this.weiboID = weiboID;
 		this.weiboName = weiboName;
 		this.crowdType = crowdType;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getNickName() {
+		return nickName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public String getPassword() {
@@ -144,19 +146,19 @@ public class User extends BaseEntity{
 	}
 
 	public String getEmail() {
-		return Email;
+		return email;
 	}
 
 	public void setEmail(String email) {
-		Email = email;
+		this.email = email;
 	}
 
-	public long getLocationId() {
-		return locationId;
+	public Long getLocationID() {
+		return locationID;
 	}
 
-	public void setLocationId(long locationId) {
-		this.locationId = locationId;
+	public void setLocationID(Long locationID) {
+		this.locationID = locationID;
 	}
 
 	public String getLocationName() {
@@ -167,20 +169,20 @@ public class User extends BaseEntity{
 		this.locationName = locationName;
 	}
 
-	public String getIcon() {
-		return icon;
+	public String getIconPath() {
+		return iconPath;
 	}
 
-	public void setIcon(String icon) {
-		this.icon = icon;
+	public void setIconPath(String iconPath) {
+		this.iconPath = iconPath;
 	}
 
-	public String getDesc() {
-		return desc;
+	public String getPersonalDesc() {
+		return personalDesc;
 	}
 
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setPersonalDesc(String personalDesc) {
+		this.personalDesc = personalDesc;
 	}
 
 	public Date getSignupDate() {
@@ -191,20 +193,20 @@ public class User extends BaseEntity{
 		this.signupDate = signupDate;
 	}
 
-	public int isIssignin() {
-		return Issignin;
+	public Integer getIsSignin() {
+		return isSignin;
 	}
 
-	public void setIssignin(int issignin) {
-		Issignin = issignin;
+	public void setIsSignin(Integer isSignin) {
+		this.isSignin = isSignin;
 	}
 
-	public long getDoubanId() {
-		return doubanId;
+	public long getDoubanID() {
+		return doubanID;
 	}
 
-	public void setDoubanId(long doubanId) {
-		this.doubanId = doubanId;
+	public void setDoubanID(long doubanID) {
+		this.doubanID = doubanID;
 	}
 
 	public String getDoubanName() {
@@ -215,12 +217,12 @@ public class User extends BaseEntity{
 		this.doubanName = doubanName;
 	}
 
-	public long getWeiboId() {
-		return WeiboId;
+	public long getWeiboID() {
+		return weiboID;
 	}
 
-	public void setWeiboId(long weiboId) {
-		WeiboId = weiboId;
+	public void setWeiboID(long weiboID) {
+		this.weiboID = weiboID;
 	}
 
 	public String getWeiboName() {
@@ -238,5 +240,7 @@ public class User extends BaseEntity{
 	public void setCrowdType(int crowdType) {
 		this.crowdType = crowdType;
 	}
+
+	
 
 }

@@ -5,8 +5,6 @@ import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.mirror.entity.BaseEntity;
 
@@ -20,7 +18,7 @@ public class UserMsg  extends BaseEntity{
 	private static final long serialVersionUID = -7384921324309070942L;
 
 		//消息内容
-		@Column(name = "content")
+		@Column(name = "msg_content")
 		private String msgContent;
 
 		//发送信息者uid

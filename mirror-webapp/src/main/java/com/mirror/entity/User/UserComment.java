@@ -21,12 +21,12 @@ public class UserComment  extends BaseEntity{
 	private static final long serialVersionUID = 1L;
 	
 		//评论内容
-		@Column(name = "content")
-		private String userName;
+		@Column(name = "comment_content")
+		private String commentContent;
 
 		//发布评论者uid
-		@Column(name="uid")
-		private long publisherId;
+		@Column(name="publisher_ID")
+		private long publisherID;
 		
 		//评论关联作品wid
 		@Column(name="wid")
@@ -51,20 +51,20 @@ public class UserComment  extends BaseEntity{
 		@Column(name="placeHolder2")
 		private String placeHolder2;
 
-		public String getUserName() {
-			return userName;
+		public String getCommentContent() {
+			return commentContent;
 		}
 
-		public void setUserName(String userName) {
-			this.userName = userName;
+		public void setCommentContent(String commentContent) {
+			this.commentContent = commentContent;
 		}
 
-		public long getPublisherId() {
-			return publisherId;
+		public long getPublisherID() {
+			return publisherID;
 		}
 
-		public void setPublisherId(long publisherId) {
-			this.publisherId = publisherId;
+		public void setPublisherID(long publisherID) {
+			this.publisherID = publisherID;
 		}
 
 		public long getWorkID() {
@@ -98,6 +98,24 @@ public class UserComment  extends BaseEntity{
 		public void setIp(String ip) {
 			this.ip = ip;
 		}
+
+		public String getPlaceHolder1() {
+			return placeHolder1;
+		}
+
+		public void setPlaceHolder1(String placeHolder1) {
+			this.placeHolder1 = placeHolder1;
+		}
+
+		public String getPlaceHolder2() {
+			return placeHolder2;
+		}
+
+		public void setPlaceHolder2(String placeHolder2) {
+			this.placeHolder2 = placeHolder2;
+		}
+
+		
 
 	
 	
