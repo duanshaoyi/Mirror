@@ -77,6 +77,9 @@ public class User extends BaseEntity{
 	@Column(name="placeHolder3")
 	private String placeHolder3;
 	
+	@Column(name = "IOSID")
+	private String iosID;
+	
 	public String getPlaceHolder1() {
 		return placeHolder1;
 	}
@@ -101,9 +104,14 @@ public class User extends BaseEntity{
 		this.placeHolder3 = placeHolder3;
 	}
 
-	
+	public String getIosID() {
+		return iosID;
+	}
 
-	
+	public void setIosID(String iosID) {
+		this.iosID = iosID;
+	}
+
 	public User(){
 		
 	}
@@ -153,11 +161,11 @@ public class User extends BaseEntity{
 		this.email = email;
 	}
 
-	public Long getLocationID() {
+	public long getLocationID() {
 		return locationID;
 	}
 
-	public void setLocationID(Long locationID) {
+	public void setLocationID(long locationID) {
 		this.locationID = locationID;
 	}
 
@@ -193,11 +201,11 @@ public class User extends BaseEntity{
 		this.signupDate = signupDate;
 	}
 
-	public Integer getIsSignin() {
+	public int getIsSignin() {
 		return isSignin;
 	}
 
-	public void setIsSignin(Integer isSignin) {
+	public void setIsSignin(int isSignin) {
 		this.isSignin = isSignin;
 	}
 

@@ -23,13 +23,15 @@ public class Work extends BaseEntity{
 		@Column(name="uid")
 		private long uid;	
 
+		
+
 		//作品标题
 		@Column(name = "title")
 		private String title;
 
 		//作品描述
-		@Column(name="desc") 
-		private String desc;
+		@Column(name="description") 
+		private String desciption;
 
 		//作品标签
 		@Column(name="tags") 
@@ -88,14 +90,14 @@ public class Work extends BaseEntity{
 			
 		}
 		
-		public Work(long uid, String title, String desc, String tags,
+		public Work(long uid, String title, String desciption, String tags,
 				long imageid, String imageURL, long audioid, String audioURL,
 				long videoid, String videoURL, Timestamp uploadTime,
 				String privacy, boolean canReply, int status) {
 			super();
 			this.uid = uid;
 			this.title = title;
-			this.desc = desc;
+			this.desciption = desciption;
 			this.tags = tags;
 			this.imageid = imageid;
 			this.imageURL = imageURL;
@@ -125,12 +127,12 @@ public class Work extends BaseEntity{
 			this.title = title;
 		}
 
-		public String getDesc() {
-			return desc;
+		public String getDesciption() {
+			return desciption;
 		}
 
-		public void setDesc(String desc) {
-			this.desc = desc;
+		public void setDesciption(String desciption) {
+			this.desciption = desciption;
 		}
 
 		public String getTags() {
@@ -221,6 +223,28 @@ public class Work extends BaseEntity{
 			this.status = status;
 		}
 		
-		
+		public String getPlaceHolder1() {
+			return placeHolder1;
+		}
+
+		public void setPlaceHolder1(String placeHolder1) {
+			this.placeHolder1 = placeHolder1;
+		}
+
+		public String getPlaceHolder2() {
+			return placeHolder2;
+		}
+
+		public void setPlaceHolder2(String placeHolder2) {
+			this.placeHolder2 = placeHolder2;
+		}
+
+		public String getPlaceHolder3() {
+			return placeHolder3;
+		}
+
+		public void setPlaceHolder3(String placeHolder3) {
+			this.placeHolder3 = placeHolder3;
+		}
 }
 	

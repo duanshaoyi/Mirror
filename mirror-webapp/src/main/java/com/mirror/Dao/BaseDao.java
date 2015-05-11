@@ -1,10 +1,8 @@
 package com.mirror.Dao;
 
 import java.io.Serializable;
-import java.util.List;
 
 public interface BaseDao<T, ID extends Serializable> {
-	
 
 	/**
      * 按照主键查找
@@ -13,14 +11,6 @@ public interface BaseDao<T, ID extends Serializable> {
      * @return T
      */
     public T find(ID id);
-    
-    /**
-     * 获取所有entity
-     *
-     * @param entityClass
-     * @return List<T> entity list
-     */
-	List<T> findAll(Class<T> entityClass);
     
     
     /**
@@ -40,20 +30,11 @@ public interface BaseDao<T, ID extends Serializable> {
     
     
     /**
-     * 删除实体
+     * 删除
      *
      * @param entity
      */
     public void remove(T entity);
-    
-    
-    /**
-     * 根据ID删除实体
-     *
-     * @param entity
-     */
-    public void remove(T entity, ID id);   
-    
     
     /**
      * 刷新数据
@@ -69,12 +50,4 @@ public interface BaseDao<T, ID extends Serializable> {
      * @return ID
      */
     public ID getIdentifier(T entity);
-    
-	  /**
-     * 获取所有entity
-     *
-     * @param entityClass
-     * @return count of entities
-     */
-	long findCount(Class<T> entityClass);
 }
