@@ -25,16 +25,10 @@ public class BaseEntity implements Serializable{
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public long ID;
 	
-//	@Column(name="create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP" , insertable = true)
-//	public Timestamp createAt;
-//	
-//	@Column(name="update_at" , columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" , insertable = true)
-//	public Timestamp updateAt;
-	
 	@Column(name="create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP" , insertable = true)
 	public Timestamp createAt;
 	
-	@Column(name="update_at" , columnDefinition = "TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" , insertable = true)
+	@Column(name="update_at" , columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" , insertable = true)
 	public Timestamp updateAt;
 	
 	public Timestamp getUpdateAt() {
