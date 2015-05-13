@@ -14,11 +14,11 @@ public class Map_TagCrowd extends BaseEntity{
 
 	//»À»∫cid
 	@Column(name="cid") 
-	private int cid;	
+	private Long cid;	
 	
 	//±Í«©tid
 	@Column(name="tid") 
-	private long tid;
+	private Long tid;
 	
 	@Column(name="placeHolder1")
 	private String placeHolder1;
@@ -29,25 +29,25 @@ public class Map_TagCrowd extends BaseEntity{
 	@Column(name="placeHolder3")
 	private String placeHolder3;
 
-	public Map_TagCrowd(int cid, long tid) {
+	public Map_TagCrowd(Long cid, Long tid) {
 		super();
 		this.cid = cid;
 		this.tid = tid;
 	}
 
-	public int getCid() {
+	public Long getCid() {
 		return cid;
 	}
 
-	public void setCid(int cid) {
+	public void setCid(Long cid) {
 		this.cid = cid;
 	}
 
-	public long getTid() {
+	public Long getTid() {
 		return tid;
 	}
 
-	public void setTid(long tid) {
+	public void setTid(Long tid) {
 		this.tid = tid;
 	}
 	

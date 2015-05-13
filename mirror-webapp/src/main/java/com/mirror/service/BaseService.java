@@ -33,7 +33,7 @@ public interface BaseService <T, ID extends Serializable>{
     * @param ids the ids
     * @return the list
     */
-   public abstract List<T> findList(ID... ids);
+   public List<T> findList(ID... ids);
    
    /**
     * ´´½¨
@@ -48,7 +48,7 @@ public interface BaseService <T, ID extends Serializable>{
     * @param entity the entity
     * @return the t
     */
-   public abstract T update(T entity);
+   public T update(T entity);
    
    /**
     * É¾³ý

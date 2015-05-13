@@ -15,11 +15,11 @@ public class Map_TagWork extends BaseEntity {
 
 	//作品wid
 	@Column(name="wid") 
-	private long wid;	
+	private Long wid;	
 	
 	//标签tid
 	@Column(name="tid") 
-	private long tid;
+	private Long tid;
 
 	//权重
 	@Column(name="weight") 
@@ -34,26 +34,26 @@ public class Map_TagWork extends BaseEntity {
 	@Column(name="placeHolder3")
 	private String placeHolder3;
 
-	public Map_TagWork(long wid, long tid, double weight) {
+	public Map_TagWork(Long wid, Long tid, double weight) {
 		super();
 		this.wid = wid;
 		this.tid = tid;
 		this.weight = weight;
 	}
 
-	public long getWid() {
+	public Long getWid() {
 		return wid;
 	}
 
-	public void setWid(long wid) {
+	public void setWid(Long wid) {
 		this.wid = wid;
 	}
 
-	public long getTid() {
+	public Long getTid() {
 		return tid;
 	}
 
-	public void setTid(long tid) {
+	public void setTid(Long tid) {
 		this.tid = tid;
 	}
 

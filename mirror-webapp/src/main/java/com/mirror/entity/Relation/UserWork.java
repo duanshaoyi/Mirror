@@ -17,11 +17,11 @@ public class UserWork  extends BaseEntity{
 
 	//用户uid
 	@Column(name="uid")
-	private long uid;	
+	private Long uid;	
 	
 	//作品wid
 	@Column(name="wid") 
-	private long wid;
+	private Long wid;
 	
 	//动作类型（0：点赞 1：收藏）
 	@Column(name="actionType")
@@ -44,7 +44,7 @@ public class UserWork  extends BaseEntity{
 		
 	}
 
-	public UserWork(long uid, long wid, int actionType, Timestamp actionTime) {
+	public UserWork(Long uid, Long wid, int actionType, Timestamp actionTime) {
 		super();
 		this.uid = uid;
 		this.wid = wid;
@@ -52,19 +52,19 @@ public class UserWork  extends BaseEntity{
 		this.actionTime = actionTime;
 	}
 
-	public long getUid() {
+	public Long getUid() {
 		return uid;
 	}
 
-	public void setUid(long uid) {
+	public void setUid(Long uid) {
 		this.uid = uid;
 	}
 
-	public long getWid() {
+	public Long getWid() {
 		return wid;
 	}
 
-	public void setWid(long wid) {
+	public void setWid(Long wid) {
 		this.wid = wid;
 	}
 

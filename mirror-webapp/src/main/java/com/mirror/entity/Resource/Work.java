@@ -21,7 +21,7 @@ public class Work extends BaseEntity{
 
 		//上传用户uid
 		@Column(name="uid")
-		private long uid;	
+		private Long uid;	
 
 		
 
@@ -39,7 +39,7 @@ public class Work extends BaseEntity{
 
 		//作品图片imageid
 		@Column(name="imageid") 
-		private long imageid;
+		private Long imageid;
 
 		//作品图片存放路径imageURL
 		@Column(name="imageURL") 
@@ -47,7 +47,7 @@ public class Work extends BaseEntity{
 
 		//作品音频audioid
 		@Column(name="audioid") 
-		private long audioid;
+		private Long audioid;
 
 		//作品音频存放路径audioURL
 		@Column(name="audioURL") 
@@ -55,7 +55,7 @@ public class Work extends BaseEntity{
 
 		//作品视频videoid
 		@Column(name="videoid") 
-		private long videoid;
+		private Long videoid;
 
 		//作品视频存放路径videoURL
 		@Column(name="videoURL") 
@@ -90,10 +90,10 @@ public class Work extends BaseEntity{
 			
 		}
 		
-		public Work(long uid, String title, String desciption, String tags,
-				long imageid, String imageURL, long audioid, String audioURL,
-				long videoid, String videoURL, Timestamp uploadTime,
-				String privacy, boolean canReply, int status) {
+		public Work(Long uid, String title, String desciption, String tags,
+				Long imageid, String imageURL, Long audioid, String audioURL,
+				Long videoid, String videoURL, Timestamp uploadTime,
+				String privacy, boolean canReply, Integer status) {
 			super();
 			this.uid = uid;
 			this.title = title;
@@ -111,11 +111,11 @@ public class Work extends BaseEntity{
 			this.status = status;
 		}
 
-		public long getUid() {
+		public Long getUid() {
 			return uid;
 		}
 
-		public void setUid(long uid) {
+		public void setUid(Long uid) {
 			this.uid = uid;
 		}
 
@@ -143,11 +143,11 @@ public class Work extends BaseEntity{
 			this.tags = tags;
 		}
 
-		public long getImageid() {
+		public Long getImageid() {
 			return imageid;
 		}
 
-		public void setImageid(long imageid) {
+		public void setImageid(Long imageid) {
 			this.imageid = imageid;
 		}
 
@@ -159,11 +159,11 @@ public class Work extends BaseEntity{
 			this.imageURL = imageURL;
 		}
 
-		public long getAudioid() {
+		public Long getAudioid() {
 			return audioid;
 		}
 
-		public void setAudioid(long audioid) {
+		public void setAudioid(Long audioid) {
 			this.audioid = audioid;
 		}
 
@@ -175,11 +175,11 @@ public class Work extends BaseEntity{
 			this.audioURL = audioURL;
 		}
 
-		public long getVideoid() {
+		public Long getVideoid() {
 			return videoid;
 		}
 
-		public void setVideoid(long videoid) {
+		public void setVideoid(Long videoid) {
 			this.videoid = videoid;
 		}
 

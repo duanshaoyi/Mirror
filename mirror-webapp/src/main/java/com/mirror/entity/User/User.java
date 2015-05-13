@@ -30,7 +30,7 @@ public class User extends BaseEntity{
 	private String email;
 
 	@Column(name="location_ID")
-	private long locationID;
+	private Long locationID;
 
 	//位置名称
 	@Column(name="location_name")
@@ -49,23 +49,23 @@ public class User extends BaseEntity{
 	private Date signupDate;
 
 	@Column(name="is_signin", nullable=true)
-	private int isSignin;
+	private Integer isSignin;
 
 	@Column(name="douban_ID")
-	private long doubanID; 
+	private Long doubanID; 
 
 	@Column(name="douban_name")
 	private String doubanName;
 
 	@Column(name="weibo_ID")
-	private long weiboID; 
+	private Long weiboID; 
 
 	@Column(name="weibo_name")
 	private String weiboName;
 
 	//人群分类
 	@Column(name="crowd_type")
-	private int crowdType;
+	private Integer crowdType;
 	
 	@Column(name="placeHolder1")
 	private String placeHolder1;
@@ -117,9 +117,9 @@ public class User extends BaseEntity{
 	}
 
 	public User(String nickName, String password, String email,
-			long locationID, String locationName, String icon, String personalDesc,
-			Date signupDate, int isSignin, long doubanID,
-			String doubanName, long weiboID, String weiboName, int crowdType) {
+			Long locationID, String locationName, String icon, String personalDesc,
+			Date signupDate, Integer isSignin, Long doubanID,
+			String doubanName, Long weiboID, String weiboName, Integer crowdType) {
 		super();
 		this.nickName = nickName;
 		this.password = password;
@@ -161,11 +161,11 @@ public class User extends BaseEntity{
 		this.email = email;
 	}
 
-	public long getLocationID() {
+	public Long getLocationID() {
 		return locationID;
 	}
 
-	public void setLocationID(long locationID) {
+	public void setLocationID(Long locationID) {
 		this.locationID = locationID;
 	}
 
@@ -209,11 +209,11 @@ public class User extends BaseEntity{
 		this.isSignin = isSignin;
 	}
 
-	public long getDoubanID() {
+	public Long getDoubanID() {
 		return doubanID;
 	}
 
-	public void setDoubanID(long doubanID) {
+	public void setDoubanID(Long doubanID) {
 		this.doubanID = doubanID;
 	}
 
@@ -225,11 +225,11 @@ public class User extends BaseEntity{
 		this.doubanName = doubanName;
 	}
 
-	public long getWeiboID() {
+	public Long getWeiboID() {
 		return weiboID;
 	}
 
-	public void setWeiboID(long weiboID) {
+	public void setWeiboID(Long weiboID) {
 		this.weiboID = weiboID;
 	}
 

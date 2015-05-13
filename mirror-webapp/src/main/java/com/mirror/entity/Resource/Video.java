@@ -33,15 +33,15 @@ public class Video extends BaseEntity{
 	
 	//视频大小
 	@Column(name="fileSize")
-	private long size; 
+	private Long size; 
 
 	//归属作品wid
 	@Column(name="wid") 
-	private long workid;
+	private Long workid;
 
 	//上传用户uid
 	@Column(name="uid") 
-	private long uid;	
+	private Long uid;	
 	
 	//上传时间
 	@Column(name="commentTime",insertable = true)

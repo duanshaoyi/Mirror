@@ -16,15 +16,63 @@ public class UserUser extends BaseEntity{
 
 	//关系发起者uid
 	@Column(name="uidFrom") 
-	private long uidFrom;	
+	private Long uidFrom;	
 	
 	//关系接受者uid
 	@Column(name="uidTo") 
-	private long uidTo;
+	private Long uidTo;
 	
 	//关系状态（0：关注 1：屏蔽）
 	@Column(name="status")
-	private int status;
+	private Integer status;
+
+	public Long getUidFrom() {
+		return uidFrom;
+	}
+
+	public void setUidFrom(Long uidFrom) {
+		this.uidFrom = uidFrom;
+	}
+
+	public Long getUidTo() {
+		return uidTo;
+	}
+
+	public void setUidTo(Long uidTo) {
+		this.uidTo = uidTo;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public Timestamp getCommentTime() {
+		return commentTime;
+	}
+
+	public void setCommentTime(Timestamp commentTime) {
+		this.commentTime = commentTime;
+	}
+
+	public String getPlaceHolder1() {
+		return placeHolder1;
+	}
+
+	public void setPlaceHolder1(String placeHolder1) {
+		this.placeHolder1 = placeHolder1;
+	}
+
+	public String getPlaceHolder2() {
+		return placeHolder2;
+	}
+
+	public void setPlaceHolder2(String placeHolder2) {
+		this.placeHolder2 = placeHolder2;
+	}
 
 	//发送消息时间
 	@Column(name="commentTime",insertable = true)

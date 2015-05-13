@@ -19,19 +19,19 @@ public class WorkStatistics extends BaseEntity{
 
 	//总喜欢数
 	@Column(name="likedCount")
-	private long likecount;
+	private Long likecount;
 
 	//总收藏数
 	@Column(name="favoriteCount")
-	private long favoriteCount;
+	private Long favoriteCount;
 	
 	//总点击数	
 	@Column(name="hitsCount")
-	private long hitsCount;
+	private Long hitsCount;
 	
 	//总停留时间	
 	@Column(name="timeonworkCount")
-	private long timeonworkCount;
+	private Long timeonworkCount;
 	
 	@Column(name="placeHolder1")
 	private String placeHolder1;
@@ -47,8 +47,8 @@ public class WorkStatistics extends BaseEntity{
 		// TODO Auto-generated constructor stub
 	}
 
-	public WorkStatistics(long likecount, long favoriteCount, long hitsCount,
-			long timeonworkCount) {
+	public WorkStatistics(Long likecount, Long favoriteCount, Long hitsCount,
+			Long timeonworkCount) {
 		super();
 		this.likecount = likecount;
 		this.favoriteCount = favoriteCount;
@@ -56,35 +56,35 @@ public class WorkStatistics extends BaseEntity{
 		this.timeonworkCount = timeonworkCount;
 	}
 
-	public long getLikecount() {
+	public Long getLikecount() {
 		return likecount;
 	}
 
-	public void setLikecount(long likecount) {
+	public void setLikecount(Long likecount) {
 		this.likecount = likecount;
 	}
 
-	public long getFavoriteCount() {
+	public Long getFavoriteCount() {
 		return favoriteCount;
 	}
 
-	public void setFavoriteCount(long favoriteCount) {
+	public void setFavoriteCount(Long favoriteCount) {
 		this.favoriteCount = favoriteCount;
 	}
 
-	public long getHitsCount() {
+	public Long getHitsCount() {
 		return hitsCount;
 	}
 
-	public void setHitsCount(long hitsCount) {
+	public void setHitsCount(Long hitsCount) {
 		this.hitsCount = hitsCount;
 	}
 
-	public long getTimeonworkCount() {
+	public Long getTimeonworkCount() {
 		return timeonworkCount;
 	}
 
-	public void setTimeonworkCount(long timeonworkCount) {
+	public void setTimeonworkCount(Long timeonworkCount) {
 		this.timeonworkCount = timeonworkCount;
 	}
 	

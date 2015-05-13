@@ -14,11 +14,11 @@ public class Map_TagUser extends BaseEntity{
 
 		//用户uid
 		@Column(name="uid") 
-		private long uid;	
+		private Long uid;	
 		
 		//标签tid
 		@Column(name="tid") 
-		private long tid;
+		private Long tid;
 
 		//权重
 		@Column(name="weight") 

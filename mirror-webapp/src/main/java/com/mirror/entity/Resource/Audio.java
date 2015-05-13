@@ -30,15 +30,15 @@ public class Audio extends BaseEntity{
 
 		//音频大小
 		@Column(name="fileSize")
-		private long size; 
+		private Long size; 
 
 		//归属作品wid
 		@Column(name="wid") 
-		private long workid;
+		private Long workid;
 
 		//上传用户uid
 		@Column(name="uid") 
-		private long uid;	
+		private Long uid;	
 		
 		//上传时间
 		@Column(name="commentTime",insertable = true)
@@ -58,8 +58,8 @@ public class Audio extends BaseEntity{
 			
 		}
 
-		public Audio(String fileURL, String filename, long size, long workid,
-				long uid, Timestamp uploadTime, int status) {
+		public Audio(String fileURL, String filename, Long size, Long workid,
+				Long uid, Timestamp uploadTime, Integer status) {
 			super();
 			this.fileURL = fileURL;
 			this.filename = filename;
@@ -86,27 +86,27 @@ public class Audio extends BaseEntity{
 			this.filename = filename;
 		}
 
-		public long getSize() {
+		public Long getSize() {
 			return size;
 		}
 
-		public void setSize(long size) {
+		public void setSize(Long size) {
 			this.size = size;
 		}
 
-		public long getWorkid() {
+		public Long getWorkid() {
 			return workid;
 		}
 
-		public void setWorkid(long workid) {
+		public void setWorkid(Long workid) {
 			this.workid = workid;
 		}
 
-		public long getUid() {
+		public Long getUid() {
 			return uid;
 		}
 
-		public void setUid(long uid) {
+		public void setUid(Long uid) {
 			this.uid = uid;
 		}
 
@@ -118,7 +118,7 @@ public class Audio extends BaseEntity{
 			this.uploadTime = uploadTime;
 		}
 
-		public int getStatus() {
+		public Integer getStatus() {
 			return status;
 		}
 

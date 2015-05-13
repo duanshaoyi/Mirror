@@ -23,15 +23,15 @@ public class UserMsg  extends BaseEntity{
 
 		//发送信息者uid
 		@Column(name="uidFrom") 
-		private long uidFrom;	
+		private Long uidFrom;	
 		
 		//接受信息者uid
 		@Column(name="uidTo") 
-		private long uidTo;
+		private Long uidTo;
 		
 		//消息类型msgType（0：到用户 1：到后台）
 		@Column(name="msgType")
-		private int msgType;
+		private Integer msgType;
 
 		//发送消息时间
 		@Column(name="commentTime",insertable = true)

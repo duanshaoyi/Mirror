@@ -23,7 +23,7 @@ public class BaseEntity implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public long ID;
+	public Long ID;
 	
 	@Column(name="create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP" , insertable = true)
 	public Timestamp createAt;
@@ -39,11 +39,11 @@ public class BaseEntity implements Serializable{
 		this.updateAt = updateAt;
 	}
 
-	public long getID() {
+	public Long getID() {
 		return ID;
 	}
 
-	public void setID(long ID) {
+	public void setID(Long ID) {
 		this.ID = ID;
 	}
 

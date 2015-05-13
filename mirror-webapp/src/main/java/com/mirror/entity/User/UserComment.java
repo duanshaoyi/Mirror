@@ -26,11 +26,11 @@ public class UserComment  extends BaseEntity{
 
 		//发布评论者uid
 		@Column(name="publisher_ID")
-		private long publisherID;
+		private Long publisherID;
 		
 		//评论关联作品wid
 		@Column(name="wid")
-		private long workID;
+		private Long workID;
 
 		//评论时间
 		@Column(name="commentTime",insertable = true)
@@ -59,19 +59,19 @@ public class UserComment  extends BaseEntity{
 			this.commentContent = commentContent;
 		}
 
-		public long getPublisherID() {
+		public Long getPublisherID() {
 			return publisherID;
 		}
 
-		public void setPublisherID(long publisherID) {
+		public void setPublisherID(Long publisherID) {
 			this.publisherID = publisherID;
 		}
 
-		public long getWorkID() {
+		public Long getWorkID() {
 			return workID;
 		}
 
-		public void setWorkID(long workID) {
+		public void setWorkID(Long workID) {
 			this.workID = workID;
 		}
 
@@ -83,7 +83,7 @@ public class UserComment  extends BaseEntity{
 			this.commentTime = commentTime;
 		}
 
-		public int getStatus() {
+		public Integer getStatus() {
 			return status;
 		}
 
