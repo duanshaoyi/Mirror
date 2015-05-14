@@ -21,7 +21,8 @@ public class TestServiceImpl extends BaseServiceImpl<User, Long> implements Test
 
 	@Override
 	public String getEmailByUserName(String userName){
-		return userDao.getEmailByUserName(userName);
+		return null;
+		//return userDao.getEmailByUserName(userName);
 	}
 
 
