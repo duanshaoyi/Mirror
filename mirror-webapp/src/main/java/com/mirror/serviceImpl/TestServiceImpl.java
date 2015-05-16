@@ -15,7 +15,7 @@ public class TestServiceImpl extends BaseServiceImpl<User, Long> implements Test
 	@Resource(name="userDaoImpl")
 	private UserDao userDao;
 
-	private String testAAA;
+	private String test;
 
 	private String aaa;
 
