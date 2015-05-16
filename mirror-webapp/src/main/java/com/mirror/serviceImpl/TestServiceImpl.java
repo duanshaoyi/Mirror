@@ -18,6 +18,9 @@ public class TestServiceImpl extends BaseServiceImpl<User, Long> implements Test
 	private String test;
 
 
+=======
+	private String aaa;
+>>>>>>> Stashed changes
 
 	@Override
 	public String getEmailByUserName(String userName){
