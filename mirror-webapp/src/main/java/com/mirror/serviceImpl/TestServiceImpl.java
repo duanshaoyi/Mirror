@@ -15,12 +15,9 @@ public class TestServiceImpl extends BaseServiceImpl<User, Long> implements Test
 	@Resource(name="userDaoImpl")
 	private UserDao userDao;
 
-	private String test;
+	private String testAAA;
 
-
-=======
 	private String aaa;
->>>>>>> Stashed changes
 
 	@Override
 	public String getEmailByUserName(String userName){
