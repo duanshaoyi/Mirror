@@ -13,7 +13,7 @@ public class Map_TagUser extends BaseEntity{
 	private static final long serialVersionUID = 1645625857955422208L;
 
 		//”√ªßuid
-		@Column(name="uid") 
+		@Column(name="uid")
 		private Long uid;	
 		
 		//±Í«©tid

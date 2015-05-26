@@ -41,8 +41,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 
     public BaseServiceImpl() {
         Type type = getClass().getGenericSuperclass();
-        Type[] parameterizedType = ((ParameterizedType) type)
-                .getActualTypeArguments();
+        Type[] parameterizedType = ((ParameterizedType) type).getActualTypeArguments();
         entityClass = ((Class<T>) parameterizedType[0]);
         PropertyDescriptor[] ps = BeanUtils
                 .getPropertyDescriptors(entityClass);

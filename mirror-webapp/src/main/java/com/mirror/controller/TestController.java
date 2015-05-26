@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,18 +28,23 @@ public class TestController {
 	@Resource(name = "testServiceImpl")
 	TestService testService;
 	
+	@Value("${mysql.password}")
+	String mysqlPw;
+	
 	@RequestMapping("/bye")
 	public String bye(){
 		
 //		System.out.println(testService.getUserByID(Long.valueOf(1)));
 //		return testService.getUserByID(Long.valueOf(1));
-		return "bye";
+		
+		return this.mysqlPw;
 	}
 	
 	@RequestMapping(value = { "/getEmail" }, method = { RequestMethod.POST })
 	@ResponseBody
 	public String getEmailByUserName(@RequestParam(value="user") String user, HttpServletRequest request){
-		return testService.getEmailByUserName(user);
+//		return testService.getEmailByUserName("wang");
+		return testService.getUserEmailByWork("eee");
 	}
 	
 	@RequestMapping(value = { "/http" }, method = { RequestMethod.POST })

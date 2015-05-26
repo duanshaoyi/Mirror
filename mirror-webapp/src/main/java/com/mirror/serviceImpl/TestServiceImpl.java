@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.mirror.Dao.UserDao;
+import com.mirror.Dao.WorkDao;
 import com.mirror.entity.User.User;
 import com.mirror.service.TestService;
 
@@ -15,17 +16,19 @@ public class TestServiceImpl extends BaseServiceImpl<User, Long> implements Test
 	@Resource(name="userDaoImpl")
 	private UserDao userDao;
 
-	private String testtest;
-
-	private String aaa;
-
+	@Resource(name="workDaoImpl")
+	private WorkDao workDao;
+	
 	@Override
 	public String getEmailByUserName(String userName){
-		return null;
-		//return userDao.getEmailByUserName(userName);
+		//return userDao.find(Long.valueOf(1)).getEmail();
+		return userDao.findUserByNickname(userName);
 	}
 
-
+	@Override
+	public String getUserEmailByWork(String title){
+		return workDao.findUserEmailByWork(title);
+	}
 
 	public UserDao getUserDao() {
 		return userDao;

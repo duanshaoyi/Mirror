@@ -4,11 +4,14 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.mirror.entity.BaseEntity;
+import com.mirror.entity.User.User;
 
 
 @Entity
@@ -20,10 +23,12 @@ public class Work extends BaseEntity{
 	private static final long serialVersionUID = -7121573434953462455L;
 
 		//上传用户uid
-		@Column(name="uid")
-		private Long uid;	
+//		@Column(name="uid")
+//		private Long uid;	
 
-		
+		@ManyToOne
+	    @JoinColumn(name = "uid")
+		private User user;
 
 		//作品标题
 		@Column(name = "title")
@@ -95,7 +100,7 @@ public class Work extends BaseEntity{
 				Long videoid, String videoURL, Timestamp uploadTime,
 				String privacy, boolean canReply, Integer status) {
 			super();
-			this.uid = uid;
+//			this.uid = uid;
 			this.title = title;
 			this.desciption = desciption;
 			this.tags = tags;
@@ -111,14 +116,21 @@ public class Work extends BaseEntity{
 			this.status = status;
 		}
 
-		public Long getUid() {
-			return uid;
+//		public Long getUid() {
+//			return uid;
+//		}
+//
+//		public void setUid(Long uid) {
+//			this.uid = uid;
+//		}
+		public User getUser() {
+			return user;
 		}
 
-		public void setUid(Long uid) {
-			this.uid = uid;
+		public void setUser(User user) {
+			this.user = user;
 		}
-
+		
 		public String getTitle() {
 			return title;
 		}
