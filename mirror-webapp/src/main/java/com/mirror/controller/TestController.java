@@ -1,5 +1,9 @@
 package com.mirror.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Resource;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.support.RequestContext;
 
+import com.mirror.entity.User.User;
 import com.mirror.service.TestService;
 
 @RestController
@@ -31,20 +36,45 @@ public class TestController {
 	@Value("${mysql.password}")
 	String mysqlPw;
 	
-	@RequestMapping("/bye")
-	public String bye(){
-		
+	@RequestMapping(value={"/bye"}, method = { RequestMethod.POST })
+	@ResponseBody
+	public String bye(@RequestParam(value="content") String content){
+//		RequestBody bb;
 //		System.out.println(testService.getUserByID(Long.valueOf(1)));
 //		return testService.getUserByID(Long.valueOf(1));
+//		String str1 = request.getQueryString();
 		
-		return this.mysqlPw;
+//		BufferedReader br;
+//		String line = null;
+//		StringBuilder sb = new StringBuilder();
+//		try {
+//			br = new BufferedReader(new InputStreamReader(
+//					request.getInputStream()));
+//
+//			
+//			while ((line = br.readLine()) != null) {
+//				sb.append(line);
+//			}
+//			System.out.println(sb);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+//		String str2 = request.getParameter("User");
+		return "http://7xisij.com1.z0.glb.clouddn.com/nihao.jpg";
+//		JSONObject a = JSONObject.fromObject(sb.toString());
+//		List<User> userList = testService.getEmailByUserName(str2);
+//		return userList.get(0).getEmail();
+//		return this.mysqlPw;
 	}
 	
 	@RequestMapping(value = { "/getEmail" }, method = { RequestMethod.POST })
 	@ResponseBody
 	public String getEmailByUserName(@RequestParam(value="user") String user, HttpServletRequest request){
-//		return testService.getEmailByUserName("wang");
-		return testService.getUserEmailByWork("eee");
+		List<User> userList = testService.getEmailByUserName(user);
+		return userList.get(0).getEmail();
+//		return testService.getUserEmailByWork("eee");
 	}
 	
 	@RequestMapping(value = { "/http" }, method = { RequestMethod.POST })

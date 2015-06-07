@@ -1,6 +1,8 @@
 package com.mirror.serviceImpl;
 
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ public class TestServiceImpl extends BaseServiceImpl<User, Long> implements Test
 	private WorkDao workDao;
 	
 	@Override
-	public String getEmailByUserName(String userName){
+	public List<User> getEmailByUserName(String userName){
 		//return userDao.find(Long.valueOf(1)).getEmail();
 		return userDao.findUserByNickname(userName);
 	}

@@ -10,92 +10,75 @@ import javax.persistence.TemporalType;
 
 import com.mirror.entity.BaseEntity;
 
-
 @Entity
 @Table(name = "resource_images")
-public class Image extends BaseEntity{
-	
+public class Image extends BaseEntity {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5147219810472851713L;
 
-	//图片存放路径
-	@Column(name = "fileURL")
-	private String fileURL;
+	// 图片存放路径
+	@Column(name = "fileKey")
+	private String fileKey;
 
-	//图片名称
-	@Column(name="filename") 
-	private String filename;
+	// //图片名称
+	// @Column(name="filename")
+	// private String filename;
+	//
+	// //图片尺寸
+	// //"icon": [ 100, 49 ] // 小方图
+	// //"thumb": [ 170, 84 ], //小图
+	// //"cover": [ 0, 0 ], //封面方图
+	// //"image": [ 595, 295 ], //大图
+	// @Column(name="fileSize")
+	// private Long size;
 
-	//图片尺寸  
-	//"icon": [ 100, 49 ] // 小方图
-        //"thumb": [ 170, 84 ], //小图
-        //"cover": [ 0, 0 ], //封面方图
-        //"image": [ 595, 295 ], //大图
-	@Column(name="fileSize")
-	private Long size; 
-
-	//归属作品wid
-	@Column(name="wid") 
+	// 归属作品wid
+	@Column(name = "wid")
 	private Long workid;
 
-	//上传用户uid
-	@Column(name="uid") 
-	private Long uid;	
-	
-	//上传时间
-	@Column(name="commentTime",insertable = true)
+	// 上传用户uid
+	@Column(name = "uid")
+	private Long uid;
+
+	// 上传时间
+	@Column(name = "commentTime", insertable = true)
 	private Timestamp uploadTime;
 
-	//图片状态
-	@Column(name="status")
+	// 图片状态
+	@Column(name = "status")
 	private int status;
-	
-	@Column(name="placeHolder1")
+
+	@Column(name = "placeHolder1")
 	private String placeHolder1;
 
-	@Column(name="placeHolder2")
+	@Column(name = "placeHolder2")
 	private String placeHolder2;
-	
-	public Image(){
-		
-	}
 
-	public Image(String fileURL, String filename, Long size, Long workid,
-			Long uid, Timestamp uploadTime, Integer status) {
+	public Image() {
+
+	}
+	
+
+	public Image(String fileKey, Long workid, Long uid, Timestamp uploadTime,
+			int status) {
 		super();
-		this.fileURL = fileURL;
-		this.filename = filename;
-		this.size = size;
+		this.fileKey = fileKey;
 		this.workid = workid;
 		this.uid = uid;
 		this.uploadTime = uploadTime;
 		this.status = status;
 	}
 
-	public String getFileURL() {
-		return fileURL;
+
+	public String getFileKey() {
+		return fileKey;
 	}
 
-	public void setFileURL(String fileURL) {
-		this.fileURL = fileURL;
-	}
-
-	public String getFilename() {
-		return filename;
-	}
-
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
-
-	public Long getSize() {
-		return size;
-	}
-
-	public void setSize(Long size) {
-		this.size = size;
+	public void setFileKey(String fileKey) {
+		this.fileKey = fileKey;
 	}
 
 	public Long getWorkid() {
@@ -122,12 +105,12 @@ public class Image extends BaseEntity{
 		this.uploadTime = uploadTime;
 	}
 
-	public Integer getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
-	
+
 }

@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/file")
-@MultipartConfig(fileSizeThreshold=1024*1024, maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
+@MultipartConfig(fileSizeThreshold=1024*1024, maxFileSize=1024*1024*50, maxRequestSize=1024*1024*5*50)
 public class FileProcessController {
  
 	private static final Logger logger = LoggerFactory
@@ -34,11 +34,11 @@ public class FileProcessController {
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
     public @ResponseBody
     String uploadFileHandler(@RequestParam("name") String name,
-            @RequestParam("file") MultipartFile file) {
- 
-        if (!file.isEmpty()) {
+            @RequestParam("fuck") MultipartFile fuck) {
+
+        if (!fuck.isEmpty()) {
             try {
-                byte[] bytes = file.getBytes();
+                byte[] bytes = fuck.getBytes();
  
                 // Creating the directory to store file
                 String rootPath = System.getProperty("catalina.home");

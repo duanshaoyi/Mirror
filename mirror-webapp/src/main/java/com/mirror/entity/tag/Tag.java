@@ -44,5 +44,4 @@ public class Tag extends BaseEntity{
 		this.catogory = catogory;
 	}
 
-	
 }

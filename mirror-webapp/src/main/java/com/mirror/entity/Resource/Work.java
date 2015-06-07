@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -13,250 +14,236 @@ import javax.persistence.TemporalType;
 import com.mirror.entity.BaseEntity;
 import com.mirror.entity.User.User;
 
-
 @Entity
 @Table(name = "resource_work")
-public class Work extends BaseEntity{
-		/**
+public class Work extends BaseEntity {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7121573434953462455L;
 
-		//上传用户uid
-//		@Column(name="uid")
-//		private Long uid;	
+	// //上传用户uid
+	// @Column(name="uid")
+	// private Long uid;
 
-		@ManyToOne
-	    @JoinColumn(name = "uid")
-		private User user;
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name = "uid")
+	private User user;
 
-		//作品标题
-		@Column(name = "title")
-		private String title;
+	// 作品标题
+	@Column(name = "title")
+	private String title;
 
-		//作品描述
-		@Column(name="description") 
-		private String desciption;
+	// 作品描述
+	@Column(name = "description")
+	private String desciption;
 
-		//作品标签
-		@Column(name="tags") 
-		private String tags;
+	// 作品标签
+	@Column(name = "tags")
+	private String tags;
 
-		//作品图片imageid
-		@Column(name="imageid") 
-		private Long imageid;
+	// 作品视频实体
+	@OneToOne(targetEntity = Video.class)
+	@JoinColumn(name = "video_id", unique = true)
+	private Video video;
 
-		//作品图片存放路径imageURL
-		@Column(name="imageURL") 
-		private String imageURL;
+	// 作品视频实体
+	@OneToOne(targetEntity = Audio.class)
+	@JoinColumn(name = "audio_id", unique = true)
+	private Audio audio;
 
-		//作品音频audioid
-		@Column(name="audioid") 
-		private Long audioid;
+	// 作品视频实体
+	@OneToOne(targetEntity = Image.class)
+	@JoinColumn(name = "snapshot_id", unique = true)
+	private Image snapshot;
 
-		//作品音频存放路径audioURL
-		@Column(name="audioURL") 
-		private String audioURL;
+	// 上传时间
+	@Column(name = "uploadtime", insertable = true)
+	private Timestamp uploadTime;
 
-		//作品视频videoid
-		@Column(name="videoid") 
-		private Long videoid;
+	// 作品权限 public/private/friend
+	@Column(name = "privacy")
+	private String privacy;
 
-		//作品视频存放路径videoURL
-		@Column(name="videoURL") 
-		private String videoURL;
+	// 作品能否评论
+	@Column(name = "canReply")
+	private boolean canReply;
 
-		//上传时间
-		@Column(name="commentTime",insertable = true)
-		private Timestamp uploadTime;
+	// 作品状态
+	@Column(name = "status")
+	private int status;
 
-		//作品权限 public/private/friend
-		@Column(name="privacy")
-		private String privacy;
+	@Column(name = "geolocation")
+	private String geolocation;
 
-		//作品能否评论
-		@Column(name="canReply")
-		private boolean canReply;
+	@Column(name = "placeHolder2")
+	private String placeHolder2;
 
-		//作品状态
-		@Column(name="status")
-		private int status;
-		
-		@Column(name="placeHolder1")
-		private String placeHolder1;
+	@Column(name = "placeHolder3")
+	private String placeHolder3;
 
-		@Column(name="placeHolder2")
-		private String placeHolder2;
+	public Work() {
 
-		@Column(name="placeHolder3")
-		private String placeHolder3;
+	}
 
-		public Work(){
-			
-		}
-		
-		public Work(Long uid, String title, String desciption, String tags,
-				Long imageid, String imageURL, Long audioid, String audioURL,
-				Long videoid, String videoURL, Timestamp uploadTime,
-				String privacy, boolean canReply, Integer status) {
-			super();
-//			this.uid = uid;
-			this.title = title;
-			this.desciption = desciption;
-			this.tags = tags;
-			this.imageid = imageid;
-			this.imageURL = imageURL;
-			this.audioid = audioid;
-			this.audioURL = audioURL;
-			this.videoid = videoid;
-			this.videoURL = videoURL;
-			this.uploadTime = uploadTime;
-			this.privacy = privacy;
-			this.canReply = canReply;
-			this.status = status;
-		}
+	public Work(String title, String desciption, Timestamp uploadTime,
+			String privacy, int status, String geolocation) {
+		super();
+		this.title = title;
+		this.desciption = desciption;
+		this.uploadTime = uploadTime;
+		this.privacy = privacy;
+		// this.canReply = canReply;
+		this.status = status;
+		this.geolocation = geolocation;
+	}
 
-//		public Long getUid() {
-//			return uid;
-//		}
-//
-//		public void setUid(Long uid) {
-//			this.uid = uid;
-//		}
-		public User getUser() {
-			return user;
-		}
+	public Work(String title, String desciption, String tags, Video video,
+			Audio audio, Image snapshot, Timestamp uploadTime, String privacy,
+			int status, String geolocation) {
+		super();
+		this.title = title;
+		this.desciption = desciption;
+		this.tags = tags;
+		this.video = video;
+		this.audio = audio;
+		this.snapshot = snapshot;
+		this.uploadTime = uploadTime;
+		this.privacy = privacy;
+		// this.canReply = canReply;
+		this.status = status;
+		this.geolocation = geolocation;
+	}
 
-		public void setUser(User user) {
-			this.user = user;
-		}
-		
-		public String getTitle() {
-			return title;
-		}
+	public Work(User user, String title, String desciption, String tags,
+			Video video, Audio audio, Image snapshot, Timestamp uploadTime,
+			String privacy, int status, String geolocation) {
+		super();
+		this.user = user;
+		this.title = title;
+		this.desciption = desciption;
+		this.tags = tags;
+		this.video = video;
+		this.audio = audio;
+		this.snapshot = snapshot;
+		this.uploadTime = uploadTime;
+		this.privacy = privacy;
+		// this.canReply = canReply;
+		this.status = status;
+		this.geolocation = geolocation;
+	}
 
-		public void setTitle(String title) {
-			this.title = title;
-		}
+	public User getUser() {
+		return user;
+	}
 
-		public String getDesciption() {
-			return desciption;
-		}
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-		public void setDesciption(String desciption) {
-			this.desciption = desciption;
-		}
+	public String getTitle() {
+		return title;
+	}
 
-		public String getTags() {
-			return tags;
-		}
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-		public void setTags(String tags) {
-			this.tags = tags;
-		}
+	public String getDesciption() {
+		return desciption;
+	}
 
-		public Long getImageid() {
-			return imageid;
-		}
+	public void setDesciption(String desciption) {
+		this.desciption = desciption;
+	}
 
-		public void setImageid(Long imageid) {
-			this.imageid = imageid;
-		}
+	public String getTags() {
+		return tags;
+	}
 
-		public String getImageURL() {
-			return imageURL;
-		}
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
 
-		public void setImageURL(String imageURL) {
-			this.imageURL = imageURL;
-		}
+	public Video getVideo() {
+		return video;
+	}
 
-		public Long getAudioid() {
-			return audioid;
-		}
+	public void setVideo(Video video) {
+		this.video = video;
+	}
 
-		public void setAudioid(Long audioid) {
-			this.audioid = audioid;
-		}
+	public Audio getAudio() {
+		return audio;
+	}
 
-		public String getAudioURL() {
-			return audioURL;
-		}
+	public void setAudio(Audio audio) {
+		this.audio = audio;
+	}
 
-		public void setAudioURL(String audioURL) {
-			this.audioURL = audioURL;
-		}
+	public Image getSnapshot() {
+		return snapshot;
+	}
 
-		public Long getVideoid() {
-			return videoid;
-		}
+	public void setSnapshot(Image snapshot) {
+		this.snapshot = snapshot;
+	}
 
-		public void setVideoid(Long videoid) {
-			this.videoid = videoid;
-		}
+	public Timestamp getUploadTime() {
+		return uploadTime;
+	}
 
-		public String getVideoURL() {
-			return videoURL;
-		}
+	public void setUploadTime(Timestamp uploadTime) {
+		this.uploadTime = uploadTime;
+	}
 
-		public void setVideoURL(String videoURL) {
-			this.videoURL = videoURL;
-		}
+	public String getPrivacy() {
+		return privacy;
+	}
 
-		public Timestamp getUploadTime() {
-			return uploadTime;
-		}
+	public void setPrivacy(String privacy) {
+		this.privacy = privacy;
+	}
 
-		public void setUploadTime(Timestamp uploadTime) {
-			this.uploadTime = uploadTime;
-		}
+	public boolean isCanReply() {
+		return canReply;
+	}
 
-		public String getPrivacy() {
-			return privacy;
-		}
+	public void setCanReply(boolean canReply) {
+		this.canReply = canReply;
+	}
 
-		public void setPrivacy(String privacy) {
-			this.privacy = privacy;
-		}
+	public int getStatus() {
+		return status;
+	}
 
-		public boolean isCanReply() {
-			return canReply;
-		}
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
-		public void setCanReply(boolean canReply) {
-			this.canReply = canReply;
-		}
+	public String getGeolocation() {
+		return geolocation;
+	}
 
-		public int getStatus() {
-			return status;
-		}
+	public void setGeolocation(String geolocation) {
+		this.geolocation = geolocation;
+	}
 
-		public void setStatus(int status) {
-			this.status = status;
-		}
-		
-		public String getPlaceHolder1() {
-			return placeHolder1;
-		}
-
-		public void setPlaceHolder1(String placeHolder1) {
-			this.placeHolder1 = placeHolder1;
-		}
-
-		public String getPlaceHolder2() {
-			return placeHolder2;
-		}
-
-		public void setPlaceHolder2(String placeHolder2) {
-			this.placeHolder2 = placeHolder2;
-		}
-
-		public String getPlaceHolder3() {
-			return placeHolder3;
-		}
-
-		public void setPlaceHolder3(String placeHolder3) {
-			this.placeHolder3 = placeHolder3;
-		}
+	// Work类相等判断条件 id相等
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Work other = (Work) obj;
+		if (ID == null) {
+			if (other.ID != null)
+				return false;
+		} else if (!ID.equals(other.ID))
+			return false;
+		return true;
+	}
 }
-	

@@ -16,8 +16,9 @@ import com.qiniu.util.StringMap;
  */
 public class Qiniu_Uploader {
 
-	private String ACCESS_KEY = "07x9Jz6w86kLQgcV6EWPiV-_UzZfGjrBbodoPMmB";
-	private String SECRET_KEY = "MEqSUj0Ixom4cHYIgRxhWZIEMhqQ8a-6uEwD8-kN";
+	private String ACCESS_KEY = "2RI_6FfJDyrXak6Z1LLR1uqIIarS3JEBRdvHVlNP";
+	private String SECRET_KEY = "igdpaFrIWjkmBAfUGlxLMEfJLSGwLPe4Jj_LDmMR";
+	private String domain = "7xisij.com1.z0.glb.clouddn.com";
 
 	private UploadManager uploadManager = new UploadManager();
 	private Auth auth = null;
@@ -106,7 +107,7 @@ public class Qiniu_Uploader {
 				// 响应的文本信息
 				System.out.println(r.bodyString());
 			} catch (QiniuException e1) {
-				// ignore
+				//
 			}
 		}
 	}//upload file

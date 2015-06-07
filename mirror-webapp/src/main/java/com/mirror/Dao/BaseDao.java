@@ -7,7 +7,7 @@ public interface BaseDao<T, ID extends Serializable> {
 	
 
 	/**
-     * 按照主键查找
+     * 根据id查找entity
      *
      * @param id
      * @return T
@@ -15,7 +15,7 @@ public interface BaseDao<T, ID extends Serializable> {
     public T find(ID id);
     
     /**
-     * 获取所有entity
+     * 查找所有entity
      *
      * @param entityClass
      * @return List<T> entity list
@@ -24,7 +24,7 @@ public interface BaseDao<T, ID extends Serializable> {
     
     
     /**
-     * 新增
+     * 插入entity
      *
      * @param entity
      */
@@ -40,7 +40,7 @@ public interface BaseDao<T, ID extends Serializable> {
     
     
     /**
-     * 删除实体
+     * 删除
      *
      * @param entity
      */
@@ -48,7 +48,7 @@ public interface BaseDao<T, ID extends Serializable> {
     
     
     /**
-     * 根据ID删除实体
+     * 根据id删除实体
      *
      * @param entity
      */
@@ -56,14 +56,14 @@ public interface BaseDao<T, ID extends Serializable> {
     
     
     /**
-     * 刷新数据
+     * 刷新实体
      *
      * @param entity
      */
     public void refresh(T entity);
     
     /**
-     * 获取主键
+     * 获取实体id
      *
      * @param entity
      * @return ID
@@ -71,7 +71,7 @@ public interface BaseDao<T, ID extends Serializable> {
     public ID getIdentifier(T entity);
     
 	  /**
-     * 获取所有entity
+     * 
      *
      * @param entityClass
      * @return count of entities

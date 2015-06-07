@@ -22,8 +22,6 @@ public class Qiniu_Downloader {
 
 	
 
-
-
 		private static void getCheckCodePicFromXX(String uid, String s,String fileName) {
 			String url = "http://wap.xxx.com//p/ex.d?u_id="+uid+"&m=gvcd&s="+s;
 			String dirPath = "D:/OCR_EX/";
