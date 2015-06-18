@@ -1,5 +1,8 @@
 package com.mirror.controller;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,12 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mirror.service.AuthService;
+import com.mirror.util.ResponseJSON;
 
 
 /**
  * 
  * @author GXM
- * �û�Ȩ����ز���
+ * 用户鉴权模块，控制登录，修改信息等
  */
 @RestController
 @RequestMapping("/auth")
@@ -27,7 +31,7 @@ public class AuthenticController {
 	
 	@RequestMapping(value = { "/signup" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
-	public int signup(HttpServletRequest request){
+	public JSONObject signup(HttpServletRequest request){
 		String nickname = request.getParameter("nickname");
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
@@ -35,26 +39,29 @@ public class AuthenticController {
 		String locationName = request.getParameter("locationName");
 		String iconName = request.getParameter("iconName");
 		String personalDesc = request.getParameter("personalDesc");
-		return authService.insertUser(nickname, password, email, locationID, 
+		int status = authService.insertUser(nickname, password, email, locationID, 
 				locationName, iconName, personalDesc);
+		return ResponseJSON.getResponseJSON(status, null, null);
 	}
 	
 	@RequestMapping(value = { "/signin" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
-	public int signin(HttpServletRequest request){
+	public JSONObject signin(HttpServletRequest request){
 		String nickname = request.getParameter("nickname");
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
-		return authService.signinUser(nickname, password, email);
+		int status = authService.signinUser(nickname, password, email);
+		return ResponseJSON.getResponseJSON(status, null, null);
 	}
 	
 	@RequestMapping(value = { "/modifypw" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
-	public int modifyPassword(HttpServletRequest request){
+	public JSONObject modifyPassword(HttpServletRequest request){
 		String oldPassword = request.getParameter("oldPassword");
 		String newPassword = request.getParameter("newPassword");
 		String email = request.getParameter("email");
-		return authService.modifyPassword(email, oldPassword, newPassword);
+		int status = authService.modifyPassword(email, oldPassword, newPassword);
+		return ResponseJSON.getResponseJSON(status, null, null);
 	}
 	
 	@RequestMapping(value = { "/forgetpw" }, method = { RequestMethod.POST }, produces = { "application/json" })
@@ -68,12 +75,24 @@ public class AuthenticController {
 	
 	@RequestMapping(value = { "/modifyInfo" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
-	public int modifyInfo(HttpServletRequest request){
+	public JSONObject modifyInfo(HttpServletRequest request){
 		String email = request.getParameter("email");
 		String newNickname = request.getParameter("newNickname");
 		String personalDesc = request.getParameter("personalDesc");
 		String iconName = request.getParameter("iconName");
-		this.authService.modifyPersonalInfo(email, newNickname, personalDesc, iconName);
-		return 0;
+		int status = authService.modifyPersonalInfo(email, newNickname, personalDesc, iconName);
+		return ResponseJSON.getResponseJSON(status, null, null);
+	}
+	
+	public static void main(String[] args) {
+		JSONObject a = new JSONObject();
+		a.put("status", 0);
+		a.put("errorReason", null);
+		a.put("data", null);
+		System.out.println(ResponseJSON.getResponseJSON(1, null, null));
+		Date d = new Date();
+		System.out.println(d.getTime());
+		Timestamp aa = new Timestamp(new Date().getTime());
+		System.out.println(aa);
 	}
 }

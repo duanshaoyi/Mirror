@@ -21,7 +21,7 @@ public class Map_TagUser extends BaseEntity{
 		private Long tid;
 
 		//ШЈжи
-		@Column(name="weight") 
+		@Column(name="weight",length=20) 
 		private Double weight;
 		
 		@Column(name="placeHolder1")
@@ -33,6 +33,17 @@ public class Map_TagUser extends BaseEntity{
 		@Column(name="placeHolder3")
 		private String placeHolder3;
 
+		public Map_TagUser(){
+			super();
+		}
+		
+		public Map_TagUser(Long uid, Long tid, double weight) {
+			super();
+			this.uid = uid;
+			this.tid = tid;
+			this.weight = weight;
+		}
+		
 		public Long getUid() {
 			return uid;
 		}

@@ -3,6 +3,7 @@ package com.mirror.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Locale;
 
@@ -10,6 +11,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -36,14 +38,32 @@ public class TestController {
 	@Value("${mysql.password}")
 	String mysqlPw;
 	
-	@RequestMapping(value={"/bye"}, method = { RequestMethod.POST })
+	@RequestMapping(value={"/bye"}, method={RequestMethod.POST})
 	@ResponseBody
-	public String bye(@RequestParam(value="content") String content){
+	public JSONObject bye(HttpServletRequest request){
 //		RequestBody bb;
 //		System.out.println(testService.getUserByID(Long.valueOf(1)));
 //		return testService.getUserByID(Long.valueOf(1));
 //		String str1 = request.getQueryString();
-		
+//		String decodeStr = "";
+//		try {
+//			decodeStr = java.net.URLDecoder.decode(content, "utf8");
+//		} catch (UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		JSONObject b = new JSONObject();
+		String uid = request.getParameter("uid");
+		System.out.println(uid);
+		JSONArray a = new JSONArray();
+		a.add((new JSONObject()).element("url", "http://7xisij.com1.z0.glb.clouddn.com/nihao.jpg"));
+		a.add((new JSONObject()).element("url", "http://7xisij.com1.z0.glb.clouddn.com/山水.jpg"));
+		a.add((new JSONObject()).element("url", "http://7xisij.com1.z0.glb.clouddn.com/锟界景.jpg"));
+		b.element("status", 0);
+		b.element("data", a);
+//		JSONArray b = new JSONArray();
+//		b.add((new JSONObject()).element("bbb", "234"));
+//		b.add((new JSONObject()).element("ccc", "456"));
 //		BufferedReader br;
 //		String line = null;
 //		StringBuilder sb = new StringBuilder();
@@ -62,14 +82,22 @@ public class TestController {
 //		}
 		
 //		String str2 = request.getParameter("User");
-		return "http://7xisij.com1.z0.glb.clouddn.com/nihao.jpg";
+//		return "http://7xisij.com1.z0.glb.clouddn.com/nihao.jpg";
 //		JSONObject a = JSONObject.fromObject(sb.toString());
 //		List<User> userList = testService.getEmailByUserName(str2);
 //		return userList.get(0).getEmail();
 //		return this.mysqlPw;
+		String aa="";
+		try {
+			aa = java.net.URLEncoder.encode(a.toString(),"utf8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			return b;
 	}
 	
-	@RequestMapping(value = { "/getEmail" }, method = { RequestMethod.POST })
+	@RequestMapping(value = { "/getEmail" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
 	public String getEmailByUserName(@RequestParam(value="user") String user, HttpServletRequest request){
 		List<User> userList = testService.getEmailByUserName(user);
@@ -103,7 +131,6 @@ public class TestController {
 	            else 
 	                request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME,LocaleContextHolder.getLocale());
 	            
-	            //从后台代码获取国际化信息
 	            RequestContext requestContext = new RequestContext(request);
 	            model.addAttribute("money", requestContext.getMessage("money"));
 	            model.addAttribute("date", requestContext.getMessage("date"));

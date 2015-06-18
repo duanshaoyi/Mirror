@@ -51,13 +51,13 @@ public class UserUserRelationDaoImpl extends BaseDaoImpl<UserUser, Long>
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public int findstatusByuids(Long uidfrom, Long uidto) {
+	public int findstatusByuids(Long uidFrom, Long uidTo) {
 
 		int status=0;
-		String jpql = "select uu.status from UserUser uu where uu.uidfrom=:uidfrom and uu.uidto=:uidto";
+		String jpql = "select uu.status from UserUser uu where uu.uidFrom=:uidFrom and uu.uidTo=:uidTo";
 		// ¥¥Ω®≤È—Ø
 		status = entityManager.createQuery(jpql)
-				.setParameter("ufrom", uidfrom).setParameter("uto", uidto)
+				.setParameter("uidFrom", uidFrom).setParameter("uidTo", uidTo)
 				.getFirstResult();
 		
 		return status;

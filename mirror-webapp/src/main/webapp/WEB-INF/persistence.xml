@@ -19,7 +19,7 @@
          <property name="hibernate.jdbc.batch_size" value="10"/>  
          <property name="hibernate.show_sql" value="true"/>  
          <property name="hibernate.format_sql" value="false"/>
-         <property name="generateDdl" value="true" />   
+         <property name="generateDdl" value="true" />
       </properties>  
   </persistence-unit>  
 </persistence>  

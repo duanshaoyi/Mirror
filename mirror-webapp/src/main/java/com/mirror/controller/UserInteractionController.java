@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mirror.service.UserInteractionService;
+import com.mirror.util.ResponseJSON;
 
 /**
  * 
  * @author GXM
- * ÓÃ»§ÓëÓÃ»§Ö®¼ä½»»¥Ïà¹Ø²Ù×÷
+ * ç”¨æˆ·ä¸Žç”¨æˆ·ä¹‹é—´äº¤äº’
  */
 @RestController
 @RequestMapping("/user")
@@ -26,39 +27,41 @@ public class UserInteractionController {
 	
 	@RequestMapping(value = { "/sendmsg" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
-	public int sendMsg(HttpServletRequest request){
+	public JSONObject sendMsg(HttpServletRequest request){
 
 		Long uidFrom = Long.valueOf(request.getParameter("uidFrom"));
 		Long uidTo = Long.valueOf(request.getParameter("uidTo"));
 		String msg = request.getParameter("msg");
 		Integer msgType = Integer.valueOf(request.getParameter("msgType"));
-		userInteractionService.insertUserMsg(uidFrom, uidTo, msg, msgType);
-		return 0;
+		int status = userInteractionService.insertUserMsg(uidFrom, uidTo, msg, msgType);
+		return ResponseJSON.getResponseJSON(status, null, null);
 	}
 	
 	@RequestMapping(value = { "/flow" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
-	public int flow(HttpServletRequest request){
+	public JSONObject flow(HttpServletRequest request){
 		Long uidFrom = Long.valueOf(request.getParameter("uidFrom"));
 		Long uidTo = Long.valueOf(request.getParameter("uidTo"));
-		return userInteractionService.flowUser(uidFrom, uidTo);
+		int status = userInteractionService.flowUser(uidFrom, uidTo);
+		return ResponseJSON.getResponseJSON(status, null, null);
 	}
 	
 	@RequestMapping(value = { "/cancelflow" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
-	public int cancelflow(HttpServletRequest request){
+	public JSONObject cancelflow(HttpServletRequest request){
 		Long uidFrom = Long.valueOf(request.getParameter("uidFrom"));
 		Long uidTo = Long.valueOf(request.getParameter("uidTo"));
 		
-		return userInteractionService.cancelFlowUser(uidFrom, uidTo);
+		int status = userInteractionService.cancelFlowUser(uidFrom, uidTo);
+		return ResponseJSON.getResponseJSON(status, null, null);
 	}
 	
 	@RequestMapping(value = { "/tags" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
-	public int tags(HttpServletRequest request){
+	public JSONObject tags(HttpServletRequest request){
 		Long uid = Long.valueOf(request.getParameter("userID"));
 		String[] tags = request.getParameter("tags").split("_");		
 		userInteractionService.insertTags(uid, tags);
-		return 0;
+		return ResponseJSON.getResponseJSON(0, null, null);
 	}
 }

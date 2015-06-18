@@ -1,6 +1,7 @@
 package com.mirror.serviceImpl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,11 +13,14 @@ import org.springframework.stereotype.Service;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import com.mirror.Dao.TagDao;
 import com.mirror.Dao.UserDao;
 import com.mirror.Dao.UserWorkRelationDao;
 import com.mirror.Dao.UserUserRelationDao;
 import com.mirror.Dao.VideoDao;
 import com.mirror.Dao.WorkDao;
+import com.mirror.entity.Relation.Map_TagUser;
+import com.mirror.entity.Relation.Map_TagWork;
 import com.mirror.entity.Relation.UserUser;
 import com.mirror.entity.Relation.UserWork;
 import com.mirror.entity.Resource.Video;
@@ -29,7 +33,7 @@ import com.qiniu.util.Auth;
 public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 		StreamService {
 
-	// DAO²ãÒÀÀµ×¢Èë
+	// DAOå±‚ä¾èµ–æ³¨å…¥
 	@Resource(name = "workDaoImpl")
 	private WorkDao workDao;
 
@@ -45,88 +49,164 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 	@Resource(name = "videoDaoImpl")
 	private VideoDao videoDao;
 	
-	//ÆßÅ£ÓòÃû
+	@Resource(name = "TagDaoImpl")
+	private TagDao tagDao;
+	
+	//ä¸ƒç‰›åŸŸå
 	@Value("${qiniu.domain}")
 	private String domain;
 	
 	private String ACCESS_KEY = "2RI_6FfJDyrXak6Z1LLR1uqIIarS3JEBRdvHVlNP";
 	/**
-	 * ÇëÇóÒ»¸öÌØ¶¨×÷ÕßµÄ¸öÈË×÷Æ·£¬ÒÔ·ÖÒ³ĞÎÊ½·µ»Ø×÷Æ·ÁĞ±í£¬Ã¿Ò³×÷Æ·×î¶àÎå¸ö×÷Æ·
-	 * ÇëÇóÕßuid	 @param uid
-	 * ×÷Õßuid	 @param authorid
-	 * Ò³ĞòÊı  		 @param pageNo
-	 * @return ×÷Æ·ĞÅÏ¢£¬
+	 * è¯·æ±‚ä¸€ä¸ªç‰¹å®šä½œè€…çš„ä¸ªäººä½œå“ï¼Œä»¥åˆ†é¡µå½¢å¼è¿”å›ä½œå“åˆ—è¡¨ï¼Œæ¯é¡µä½œå“æœ€å¤šäº”ä¸ªä½œå“
+	 * è¯·æ±‚è€…uid	 @param uid
+	 * ä½œè€…uid	 @param authorid
+	 * é¡µåºæ•°  		 @param pageNo
+	 * @return ä½œå“ä¿¡æ¯ï¼Œ
 	 */
-	public String get_usertimeline(Long uid, Long authorid, int pageNo) {
-		String JSON = null;
+	public JSONArray get_usertimeline(Long uid, Long authorid, int pageNo) {
+		JSONArray JSON = new JSONArray();
 		List<Work> worklist = null;
 		List<UserUser> usrusrllist = null;
 		List<UserWork> usrworkllist = null;
+		int PageSize=5;
 
-		// ¸ù¾İauthorid Éú³É×÷ÕßÊµÌå£¬ÓÃÓÚ²éÑ¯
+		// æ ¹æ®authorid ç”Ÿæˆä½œè€…å®ä½“ï¼Œç”¨äºæŸ¥è¯¢
 		User author = new User();
 		author.setID(authorid);
-		author.setEmail("email");
+//		author.setEmail("email");
 
-		// »ñµÃ×÷ÕßµÄ×÷Æ·¼¯£¬ÒÔ·ÖÒ³ĞÎÊ½·µ»Ø
-		worklist = workDao.findPageByUser(author, pageNo, 5);// ¶¨ÒåÈ«¾Ö±äÁ¿
+		// è·å¾—ä½œè€…çš„ä½œå“é›†ï¼Œä»¥åˆ†é¡µå½¢å¼è¿”å›
+		worklist = workDao.findPageByUser(author, pageNo, PageSize);// å®šä¹‰å…¨å±€å˜é‡
 
-		// »ñÈ¡ÇëÇóÕßÓëµ±Ç°×÷Õß¹ØÏµ£¨ÊÇ·ñ¹Ø×¢£©
+		// è·å–è¯·æ±‚è€…ä¸å½“å‰ä½œè€…å…³ç³»ï¼ˆæ˜¯å¦å…³æ³¨
 		int usr_relation_status = useruserRelationDao.findstatusByuids(uid,authorid);
 
-		// »ñÈ¡ÇëÇóÕßÓë×÷Æ·¼ä¹ØÏµ£¨ÊÇ·ñÊÕ²Ø£©
+		// è·å–è¯·æ±‚è€…ä¸ä½œå“é—´å…³ç³»ï¼ˆæ˜¯å¦æ”¶è—ï¼‰
 		usrworkllist = userworkRelationDao.findFavoriteWorksbyUid(uid);
 
-		// Éú³ÉJSON
+		// ç”ŸæˆJSON
 		JSON = genJSON_forWorkList(worklist, usr_relation_status, usrworkllist);
 
 		return JSON;
 	}
 	
-//	public String get_recomandtimeline(Long uid, int pageNo) {
-//		String JSON = null;
-//		List<Work> worklist = null;
-//		List<UserUser> usrusrllist = null;
-//		List<UserWork> usrworkllist = null;
-//
-//		// ¸ù¾İauthorid Éú³É×÷ÕßÊµÌå£¬ÓÃÓÚ²éÑ¯
-//		User author = new User();
-//		author.setID(authorid);
-//		author.setEmail("email");
-//
-//		// »ñµÃ×÷ÕßµÄ×÷Æ·¼¯£¬ÒÔ·ÖÒ³ĞÎÊ½·µ»Ø
-//		worklist = workDao.findPageByUser(author, pageNo, 5);// ¶¨ÒåÈ«¾Ö±äÁ¿
-//
-//		// »ñÈ¡ÇëÇóÕßÓëµ±Ç°×÷Õß¹ØÏµ£¨ÊÇ·ñ¹Ø×¢£©
-////		int usr_relation_status = usrusrRelationDao.findstatusByuids(uid,authorid);
-//
-//		// »ñÈ¡ÇëÇóÕßÓë×÷Æ·¼ä¹ØÏµ£¨ÊÇ·ñÊÕ²Ø£©
-//		usrworkllist = userworkRelationDao.findFavoriteWorksbyUid(uid);
-//
-//		// Éú³ÉJSON
-////		JSON = genJSON_forWorkList(worklist, usr_relation_status, usrworkllist);
-//
-//		return JSON;
-//	}
+	public JSONArray get_recomandtimeline(Long uid, int pageNo) {
+		String JSON = null;
+		List<Map_TagUser> mtulist = null;
+		List<Map_TagWork> mtwlist = null;
+		List<Work> worklist=null;
+		int pageSize=5;
+		
+		//List<UserUser> usrusrllist = null;
+		//List<UserWork> usrworkllist = null;
 
-	public String work_upload(Work w, Long authorid) {
-		String Res = null;
+		// è·å¾—ä½œè€…æ‰€å¯¹åº”çš„æ ‡ç­¾é›†åˆ
+		mtulist = tagDao.findtagsbyUser(uid);		
+		//ç”Ÿæˆæ ‡ç­¾idé›†åˆ
+		List<Long> tagids = new ArrayList<Long>();
+//		String tagids="(0";
+		Iterator<Map_TagUser> mtu_it= mtulist.iterator();
+		while(mtu_it.hasNext()){
+//			Long tid=mtu_it.next().getTid();
+//			tagids+=","+tid;
+			tagids.add(mtu_it.next().getTid());
+		}
+//		tagids+=")";
 
-		// ÉèÖÃ×÷Õß
+
+		// è·å–ä¸€ç»„tagæ‰€å¯¹åº”çš„ä½œå“é›†åˆ
+		mtwlist=tagDao.findWorkstagsbyTagids(tagids);
+		//ç”Ÿæˆwork idé›†åˆ
+		List<Long> workids = new ArrayList<Long>();
+		Iterator<Map_TagWork> mtw_it= mtwlist.iterator();
+		while(mtu_it.hasNext()){
+			workids.add(mtw_it.next().getWid());
+		}
+		
+
+		// è·å–æ‰€æ¨èçš„worklist
+		worklist = workDao.findByIDs(workids, pageNo, pageSize);
+
+		// ç”ŸæˆJSON
+
+		return genJSON_forWorkList(worklist);
+	}
+
+
+	public int work_upload(Work w, Long authorid) {
+		int Res = 0;
+
+		// è®¾ç½®ä½œè€…
 		User author = userDao.find(authorid);
 		w.setUser(author);
 
 		workDao.persist(w);
+		
+		//return the entity itself rather than its ID 
+		//When the transaction ends, the flush will happen, and ID will be generated
+		
+		//æ’å…¥æˆåŠŸ
+		if(w.ID>0){
+			Res=1;
+		}
+		
 		return Res;
 	}
 
 	/**
-	 * <b>function:</b>×ª»»Java List¼¯ºÏµ½JSON
+	 * <b>function:</b>è½¬æ¢Java Listé›†åˆåˆ°JSON å¹¶é™„å¸¦å¥½å‹åŠæ”¶è—å…³ç³»
 	 * 
 	 * @author
 	 * @createDate
 	 */
-	public String genJSON_forWorkList(List<Work> worklist,
+	public JSONArray genJSON_forWorkList(List<Work> worklist) {
+
+		String JSONres = null;
+
+		JSONArray arrayres = new JSONArray();
+		// JSONres = JSONArray.fromObject(worklist).toString();
+
+		Iterator<Work> it = worklist.iterator();
+		while (it.hasNext()) {
+			Work work_current = it.next();
+			JSONObject object = new JSONObject();
+
+			object.element("Work_title", work_current.getTitle());
+			object.element("Work_privacy", work_current.getPrivacy());
+			object.element("Work_desc", work_current.getDesciption());
+			object.element("Work_videokey", work_current.getVideo()
+					.getFileKey());
+			
+			//åº”éœ€æ±‚ å–æ¶ˆéŸ³é¢‘ä¸å›¾ç‰‡æˆå‘˜
+			//object.element("Work_audiokey", work_current.getAudio().getFileKey());
+			//object.element("Work_snapshotkey", work_current.getSnapshot().getFileKey());
+			
+			object.element("Work_geolocation", work_current.getGeolocation());
+			object.element("Work_publishtime", work_current.getUploadTime());
+
+			object.element("Work_author_id", work_current.getUser().getID());
+			object.element("Work_author_nickname", work_current.getUser()
+					.getNickName());
+			object.element("Work_author_avatar_key", work_current.getUser()
+					.getIconPath());
+			
+			arrayres.add(object);
+		}
+
+		JSONres = arrayres.toString();
+
+		return arrayres;
+	}
+
+	
+	/**
+	 * <b>function:</b>è½¬æ¢Java Listé›†åˆåˆ°JSON
+	 * 
+	 * @author
+	 * @createDate
+	 */
+	public JSONArray genJSON_forWorkList(List<Work> worklist,
 			int usr_relation_status, List<UserWork> usrworklist) {
 
 		String JSONres = null;
@@ -144,10 +224,10 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 			object.element("Work_desc", work_current.getDesciption());
 			object.element("Work_videokey", work_current.getVideo()
 					.getFileKey());
-			object.element("Work_audiokey", work_current.getAudio()
-					.getFileKey());
-			object.element("Work_snapshotkey", work_current.getSnapshot()
-					.getFileKey());
+//			object.element("Work_audiokey", work_current.getAudio()
+//					.getFileKey());
+//			object.element("Work_snapshotkey", work_current.getSnapshot()
+//					.getFileKey());
 			object.element("Work_geolocation", work_current.getGeolocation());
 			object.element("Work_publishtime", work_current.getUploadTime());
 
@@ -157,10 +237,10 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 			object.element("Work_author_avatar_key", work_current.getUser()
 					.getIconPath());
 
-			// ÇëÇóÕßÓë×÷Õß¼äµÄ¹ØÏµ
+			// è¯·æ±‚è€…ä¸ä½œè€…é—´çš„å…³ç³»
 			object.element("Author_relation_status", usr_relation_status);
 
-			// ÊÇ·ñÊÕ²Øµ±Ç°×÷Æ·
+			// æ˜¯å¦æ”¶è—å½“å‰ä½œå“
 			boolean isfavorite = false;
 			if (usrworklist.contains(work_current)) {
 				isfavorite = true;
@@ -174,7 +254,7 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 
 		JSONres = arrayres.toString();
 
-		return JSONres;
+		return arrayres;
 	}
 	
 	public String findVideoURL(Long id){
@@ -184,8 +264,9 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 		String ACCESS_KEY = "2RI_6FfJDyrXak6Z1LLR1uqIIarS3JEBRdvHVlNP";
 		String SECRET_KEY = "igdpaFrIWjkmBAfUGlxLMEfJLSGwLPe4Jj_LDmMR";
 		Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
-		String token = auth.uploadToken("demomy");
-		String url = domain+video.getFileKey()+"?"+"token="+token;
-		return url;
+//		String token = auth.uploadToken("demomy");
+		String url = domain+video.getFileKey();
+		String urlSigned = auth.privateDownloadUrl(url);
+		return urlSigned;
 	}
 }

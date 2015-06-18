@@ -11,8 +11,9 @@ public interface WorkDao  extends BaseDao<Work, Long>{
 	
 	List<Work> findByPage(String jpql, int pageNo, int pageSize);
 	
-	List<Work> findPageByUser(User user, int pageNo, int pageSize);
-	
-	
+	List<Work> findPageByUser(User author, int pageNo, int pageSize);
+		
 	List<Work> findByPage(String jpql, int pageNo, int pageSize, Object... params);
+	
+	List<Work> findByIDs(List<Long> tag_ids,int pageNo, int pageSize);
 }

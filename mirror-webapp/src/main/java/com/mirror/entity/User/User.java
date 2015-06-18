@@ -249,6 +249,23 @@ public class User extends BaseEntity{
 		this.crowdType = crowdType;
 	}
 
+	// user类相等判断条件 id相等
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (ID == null) {
+			if (other.ID != null)
+				return false;
+		} else if (!ID.equals(other.ID))
+			return false;
+		return true;
+	}
 	
 
 }

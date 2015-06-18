@@ -18,12 +18,11 @@ public class Qiniu_Uploader {
 
 	private String ACCESS_KEY = "2RI_6FfJDyrXak6Z1LLR1uqIIarS3JEBRdvHVlNP";
 	private String SECRET_KEY = "igdpaFrIWjkmBAfUGlxLMEfJLSGwLPe4Jj_LDmMR";
-	private String domain = "7xisij.com1.z0.glb.clouddn.com";
 
 	private UploadManager uploadManager = new UploadManager();
 	private Auth auth = null;
 
-	Qiniu_Uploader() {
+	public Qiniu_Uploader() {
 		this.auth = Auth.create(ACCESS_KEY, SECRET_KEY);
 	}
 
@@ -37,7 +36,7 @@ public class Qiniu_Uploader {
 
 	// 简单上传，使用默认策略
 	private String getUpToken0() {
-		return auth.uploadToken("mirrorwebapp");
+		return auth.uploadToken("demomy");
 	}
 
 	// 覆盖上传
@@ -68,16 +67,18 @@ public class Qiniu_Uploader {
 	}
 
 	// 上传内存中数据
-	public void upload(byte[] data, String key, String upToken) {
+	public int upload(byte[] data, String key) {
 		try {
+			
+			String upToken=getUpToken0();
 			Response res = uploadManager.put(data, key, upToken);
 			// log.info(res);
 			// log.info(res.bodyString());
 			// Ret ret = res.jsonToObject(Ret.class);
 			if (res.isOK()) {
-				// success
+				return 1;
 			} else {
-				//
+				return 0;
 			}
 		} catch (QiniuException e) {
 			Response r = e.response;
@@ -87,8 +88,10 @@ public class Qiniu_Uploader {
 				// 响应的文本信息
 				System.out.println(r.bodyString());
 			} catch (QiniuException e1) {
-				// ignore
+				return 0;
 			}
+			
+			return 0;
 		}
 	}
 
@@ -107,12 +110,12 @@ public class Qiniu_Uploader {
 				// 响应的文本信息
 				System.out.println(r.bodyString());
 			} catch (QiniuException e1) {
-				//
+				// ignore
 			}
 		}
 	}//upload file
 
-	/**
+	/**for test
 	 * @param args
 	 */
 	public static void main(String[] args) {

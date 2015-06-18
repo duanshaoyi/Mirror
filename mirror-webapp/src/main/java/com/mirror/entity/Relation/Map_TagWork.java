@@ -13,27 +13,17 @@ public class Map_TagWork extends BaseEntity {
 	
 	private static final long serialVersionUID = 1645625857955422208L;
 
-	//作品wid
 	@Column(name="wid") 
 	private Long wid;	
 	
-	//标签tid
 	@Column(name="tid") 
 	private Long tid;
 
-	//权重
-	@Column(name="weight") 
-	private double weight;
+	@Column(name="weight",length=20) 
+	private Double weight;
 	
-	@Column(name="placeHolder1")
-	private String placeHolder1;
-
-	@Column(name="placeHolder2")
-	private String placeHolder2;
-
-	@Column(name="placeHolder3")
-	private String placeHolder3;
-
+	public Map_TagWork(){}
+	
 	public Map_TagWork(Long wid, Long tid, double weight) {
 		super();
 		this.wid = wid;

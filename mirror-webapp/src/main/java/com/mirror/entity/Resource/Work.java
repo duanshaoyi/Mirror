@@ -22,7 +22,7 @@ public class Work extends BaseEntity {
 	 */
 	private static final long serialVersionUID = -7121573434953462455L;
 
-	// //ÉÏ´«ÓÃ»§uid
+	// //ä¸Šä¼ ç”¨æˆ·uid
 	// @Column(name="uid")
 	// private Long uid;
 
@@ -30,48 +30,48 @@ public class Work extends BaseEntity {
 	@JoinColumn(name = "uid")
 	private User user;
 
-	// ×÷Æ·±êÌâ
+	// ä½œå“æ ‡é¢˜
 	@Column(name = "title")
 	private String title;
 
-	// ×÷Æ·ÃèÊö
+	// ä½œå“æè¿°
 	@Column(name = "description")
 	private String desciption;
 
-	// ×÷Æ·±êÇ©
+	// ä½œå“æ ‡ç­¾
 	@Column(name = "tags")
 	private String tags;
 
-	// ×÷Æ·ÊÓÆµÊµÌå
+	// ä½œå“è§†é¢‘å®ä½“
 	@OneToOne(targetEntity = Video.class)
 	@JoinColumn(name = "video_id", unique = true)
 	private Video video;
 
-	// ×÷Æ·ÊÓÆµÊµÌå
+	// ä½œå“è§†é¢‘å®ä½“
 	@OneToOne(targetEntity = Audio.class)
 	@JoinColumn(name = "audio_id", unique = true)
 	private Audio audio;
 
-	// ×÷Æ·ÊÓÆµÊµÌå
+	// ä½œå“è§†é¢‘å®ä½“
 	@OneToOne(targetEntity = Image.class)
 	@JoinColumn(name = "snapshot_id", unique = true)
 	private Image snapshot;
 
-	// ÉÏ´«Ê±¼ä
+	// ä¸Šä¼ æ—¶é—´
 	@Column(name = "uploadtime", insertable = true)
 	private Timestamp uploadTime;
 
-	// ×÷Æ·È¨ÏŞ public/private/friend
+	// ä½œå“æƒé™ public/private/friend
 	@Column(name = "privacy")
 	private String privacy;
 
-	// ×÷Æ·ÄÜ·ñÆÀÂÛ
+	// ä½œå“èƒ½å¦è¯„è®º
 	@Column(name = "canReply")
-	private boolean canReply;
+	private boolean canReply = true;
 
-	// ×÷Æ·×´Ì¬
+	// ä½œå“çŠ¶æ€
 	@Column(name = "status")
-	private int status;
+	private int status = 1;
 
 	@Column(name = "geolocation")
 	private String geolocation;
@@ -229,7 +229,7 @@ public class Work extends BaseEntity {
 		this.geolocation = geolocation;
 	}
 
-	// WorkÀàÏàµÈÅĞ¶ÏÌõ¼ş idÏàµÈ
+	// Work
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

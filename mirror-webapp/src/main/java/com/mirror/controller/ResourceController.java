@@ -3,12 +3,12 @@
  */
 package com.mirror.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +16,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.mirror.Dao.WorkDao;
+import com.mirror.API_interface.Qiniu.Qiniu_Uploader;
 import com.mirror.entity.Resource.Audio;
 import com.mirror.entity.Resource.Image;
 import com.mirror.entity.Resource.Video;
 import com.mirror.entity.Resource.Work;
 import com.mirror.service.StreamService;
+import com.mirror.util.ResponseJSON;
 
 /**
  * Controller for Resource operations
@@ -44,77 +46,96 @@ public class ResourceController {
 		this.streamservice = streamservice;
 	}
 
-	@RequestMapping(value = { "/upload" }, method = { RequestMethod.POST }, produces = { "application/json" })
+	@RequestMapping(value = { "/upload" }, method = { RequestMethod.POST })
 	@ResponseBody
-	public int work_upload(HttpServletRequest request) {
-		
-		//String Results_Json = null;
-		int is_success=0;
-		
-		// 请求字符串
-		String rawquery_str = request.getQueryString();
+	public JSONObject work_upload(@RequestParam("name") String fileJson,
+			@RequestParam("file") MultipartFile file) {
 
-		// 使用URLDecoder解码字符串
+		int is_success = 0;
+
 		try {
-			
-			String queryStr = java.net.URLDecoder.decode(rawquery_str, "UTF-8");
-			JSONObject object = JSONObject.fromObject(queryStr);
 
-			//parse request_str
-			Long author_id = Long.parseLong(request.getParameter("ID_Authorid"));
+			// 瑙ｆ瀽JSON鏁版嵁
+			String fileJson_utf8 = java.net.URLDecoder
+					.decode(fileJson, "UTF-8");
+			JSONObject object = JSONObject.fromObject(fileJson_utf8);
 
-			String work_title=request.getParameter("Work_title");
-			String work_privacy=request.getParameter("Work_privacy");
-			String work_desc=request.getParameter("Work_desc");
-			String work_video_key=request.getParameter("Work_videokey");
-			String work_audio_key=request.getParameter("Work_audiokey");
-			String work_snapshot_key=request.getParameter("Work_snapshotkey");
-			String work_geolocation = request.getParameter("Work_geolocation");			
-			String work_timestamp= request.getParameter("Work_publishtime");
-//					
-//			String author_name = object.getString("Author_nickname");
-//			String author_avatar_key = object.getString("Author_avatar_key");
-//			String is_followed = object.getString("Author_isfollowed");
-//			
-//			String is_favorite = object.getString("Work_isfavorite");		
-			
-			//generate work
-			Work w=new Work(work_title, work_desc, Timestamp.valueOf(work_timestamp), work_privacy, 1,work_geolocation);
-			
-			//generate relevant image/audio/video
-			Video video=null;
-			Audio audio=null;
-			Image snapshot=null;
-			if(!work_video_key.isEmpty()){
-				video=new Video(work_video_key,w.ID, author_id, Timestamp.valueOf(work_timestamp),1);
+			// 涓婁紶鏁版嵁
+			if (!file.isEmpty()) {// 鍒ゆ柇鏄惁涓虹┖
+
+				byte[] bytes = file.getBytes();
+
+				Qiniu_Uploader qt = new Qiniu_Uploader();
+
+				String key = object.getString("Work_videokey");
+//				String key = fileJson;
+
+				// 鏂囦欢涓婁紶Qiniu uploader token
+				int upload_is_succ = qt.upload(bytes, key);
+
+				if (upload_is_succ == 0) {//涓婁紶澶辫触
+					return ResponseJSON.getResponseJSON(0, null, null);
+				}
+
+			} else {
+				// 涓婁紶澶辫触
+				return ResponseJSON.getResponseJSON(0, null, null);
+			}
+
+			// parse work related info
+			Long author_id = Long.parseLong(object.getString("ID_Authorid"));
+
+			String work_title = object.getString("Work_title");
+			String work_privacy = object.getString("Work_privacy");
+			String work_desc = object.getString("Work_desc");
+			String work_video_key = object.getString("Work_videokey");
+			String work_audio_key = object.getString("Work_audiokey");
+			String work_snapshot_key = object.getString("Work_snapshotkey");
+			String work_geolocation = object.getString("Work_geolocation");
+			String work_timestamp = object.getString("Work_publishtime");
+
+			// generate work
+			Work w = new Work(work_title, work_desc,
+					Timestamp.valueOf(work_timestamp), work_privacy, 1,
+					work_geolocation);
+
+			// generate relevant image/audio/video entity
+			Video video = null;
+			Audio audio = null;
+			Image snapshot = null;
+			if (!work_video_key.isEmpty()) {
+				video = new Video(work_video_key, w.ID, author_id,
+						Timestamp.valueOf(work_timestamp), 1);
 				w.setVideo(video);
 			}
-			
-			if(!work_audio_key.isEmpty()){
-				audio=new Audio(work_audio_key,w.ID, author_id, Timestamp.valueOf(work_timestamp),1);
+
+			if (!work_audio_key.isEmpty()) {
+				audio = new Audio(work_audio_key, w.ID, author_id,
+						Timestamp.valueOf(work_timestamp), 1);
 				w.setAudio(audio);
 			}
-			
-			if(!work_audio_key.isEmpty()){
-				snapshot=new Image(work_snapshot_key,w.ID, author_id, Timestamp.valueOf(work_timestamp),1);
+
+			if (!work_audio_key.isEmpty()) {
+				snapshot = new Image(work_snapshot_key, w.ID, author_id,
+						Timestamp.valueOf(work_timestamp), 1);
 				w.setSnapshot(snapshot);
 			}
-			
-			streamservice.work_upload(w,author_id);
-		
+
+			is_success = streamservice.work_upload(w, author_id);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return ResponseJSON.getResponseJSON(0, null, null);
 		}
 
-		return is_success;
+		return ResponseJSON.getResponseJSON(is_success, null, null);
 	}
 
 	@RequestMapping(value = { "/user_timeline" }, method = { RequestMethod.GET }, produces = { "application/json" })
 	@ResponseBody
-	public String user_timeline(HttpServletRequest request) {
-		// 信息流请求结果
-		String Results_Json = null;
+	public JSONObject user_timeline(HttpServletRequest request) {
+		JSONArray Results_Json = new JSONArray();
 
 		try {
 
@@ -134,36 +155,38 @@ public class ResourceController {
 			e.printStackTrace();
 		}
 
-		return Results_Json;
+		return ResponseJSON.getResponseJSON(0, null, Results_Json);
 	}
 
-	@RequestMapping(value = { "/recommd_timeline" }, method = { RequestMethod.POST }, produces = { "application/json" })
+	@RequestMapping(value = { "/recommd_timeline" }, method = { RequestMethod.GET }, produces = { "application/json" })
 	@ResponseBody
-	public String recommd_timeline(HttpServletRequest request) {
-		// 信息流请求结果
-		String Results_Json = null;
+	public JSONObject recommd_timeline(HttpServletRequest request) {
+		JSONArray Results_Json = new JSONArray();
+		
+		try {
 
-		String parameter = request.getQueryString();
-		JSONObject object = JSONObject.fromObject(parameter);
-		String nickname = request.getParameter("nickname");
-		String password = request.getParameter("password");
-		String email = request.getParameter("eamil");
-		Long locationID = Long.valueOf(request.getParameter("locationID"));
-		String locationName = request.getParameter("locationName");
-		String iconName = request.getParameter("iconName");
-		String iconPath = "";
-		String personalDesc = request.getParameter("personalDesc");
+			String uid_str = request.getParameter("userid");
+			String page_str = request.getParameter("pageno");
 
-		return Results_Json;
+			Long uid = Long.parseLong(uid_str);
+			int pageNo = Integer.parseInt(page_str);
+
+			Results_Json = streamservice.get_recomandtimeline(uid, pageNo);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return ResponseJSON.getResponseJSON(0,null,Results_Json);
 	}
 	
-	//获取视频作品播放地址
 	@RequestMapping(value = { "/playVideo" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
 	public String playVideo(HttpServletRequest request,@RequestParam("videoID") String videoID) {
 
 		Long video = Long.valueOf(request.getParameter("videoID"));
-		
+		String v = request.getParameter("videoID");
 
 		return streamservice.findVideoURL(video);
 	}
