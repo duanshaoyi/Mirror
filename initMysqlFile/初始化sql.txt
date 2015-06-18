@@ -1,0 +1,19 @@
+1 先清除各表
+2 设置各表自增id为0  alter table relation_tag_user_map AUTO_increment=0
+
+3初始化插入数据
+
+LOAD DATA LOCAL INFILE 'F:\\mirrorDoc\\tag.csv' INTO TABLE tags FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' (ID,content);
+LOAD DATA LOCAL INFILE 'F:\\mirrorDoc\\user.csv' INTO TABLE user FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' (ID,nickname,password,email,iconpath);
+LOAD DATA LOCAL INFILE 'F:\\mirrorDoc\\usertag.csv' INTO TABLE relation_tag_user_map FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' (uid,tid,weight);
+LOAD DATA LOCAL INFILE 'F:\\mirrorDoc\\useruser.csv' INTO TABLE relation_user_user FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' (uidFrom,uidTo,status);
+LOAD DATA LOCAL INFILE 'F:\\mirrorDoc\\video.csv' INTO TABLE resource_videos FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' (ID,fileKey);
+LOAD DATA LOCAL INFILE 'F:\\mirrorDoc\\work.csv' INTO TABLE resource_work FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' (uid,video_id,geolocation,canReply,status);
+LOAD DATA LOCAL INFILE 'F:\\mirrorDoc\\userwork.csv' INTO TABLE relation_user_work FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' (uid,wid,actionType);
+LOAD DATA LOCAL INFILE 'F:\\mirrorDoc\\worktag.csv' INTO TABLE relation_tag_work_map FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' (wid,tid,weight);
+
+
+
+
+
+
