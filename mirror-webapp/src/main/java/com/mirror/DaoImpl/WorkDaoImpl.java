@@ -40,8 +40,8 @@ public class WorkDaoImpl extends BaseDaoImpl<Work, Long> implements WorkDao{
 		
 		return entityManager.createQuery(jpql).setParameter("author", author)
 	    //.setParameter("uid", uid)
-//		.setFirstResult((pageNo - 1) * pageSize)
-		.setFirstResult(0)
+		.setFirstResult((pageNo - 1) * pageSize)
+//		.setFirstResult(0)
 		.setMaxResults(pageSize)
 		.getResultList();
 	}
@@ -81,15 +81,66 @@ public class WorkDaoImpl extends BaseDaoImpl<Work, Long> implements WorkDao{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Work> findByIDs(List<Long> ids,int pageNo, int pageSize){
-		String jpql="select w from Work w where ID IN(:ids)";
+	public List<Work> findByIDs(List<Long> workids,int pageNo, int pageSize){
+		String jpql="select w from Work w where ID IN (:workids)";
 		
-		return entityManager.createQuery(jpql).setParameter("ids", ids)
+		return entityManager.createQuery(jpql).setParameter("workids", workids)
 	    //.setParameter("uid", uid)
-//		.setFirstResult((pageNo - 1) * pageSize)
+		.setFirstResult((pageNo - 1) * pageSize)
 //		.setFirstResult(0)
-//		.setMaxResults(pageSize)
+		.setMaxResults(pageSize)
 		.getResultList();
 		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Work> findByExcludeIDs(List<Long> workids,int pageNo, int pageSize){
+		String jpql="select w from Work w where ID NOT IN (:workids)";
+		
+		return entityManager.createQuery(jpql).setParameter("workids", workids)
+	    //.setParameter("uid", uid)
+		.setFirstResult((pageNo - 1) * pageSize)
+//		.setFirstResult(0)
+		.setMaxResults(pageSize)
+		.getResultList();
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Work> findTopNByExcludeIDs(List<Long> workids,int limitSize){
+		String jpql="select w from Work w where ID NOT IN (:workids)";
+		
+		return entityManager.createQuery(jpql).setParameter("workids", workids)
+		.setMaxResults(limitSize)
+		.getResultList();
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Work> findBySpecifyIndex(List<Long> workids, int offset,int pageNo, int pageSize){
+		String jpql="select w from Work w where ID NOT IN (:workids)";
+		
+		//int offset=startoffset+1;
+		
+		return entityManager.createQuery(jpql).setParameter("workids", workids)
+	    //.setParameter("uid", uid)
+		.setFirstResult(((pageNo - 1) * pageSize)+offset)
+//		.setFirstResult(0)
+		.setMaxResults(pageSize)
+		.getResultList();		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public int getRecomandStreamSize(List<Long> workids){
+		String jpql="select w from Work w where ID IN (:workids)";
+		
+		int size=0;		
+		size = entityManager.createQuery(jpql).setParameter("workids", workids).getResultList().size();
+	 
+		return size;
 	}
 }

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mirror.service.UserInteractionService;
-import com.mirror.util.ResponseJSON;
+import com.mirror.util.StringUtil;
 
 /**
  * 
@@ -34,7 +34,7 @@ public class UserInteractionController {
 		String msg = request.getParameter("msg");
 		Integer msgType = Integer.valueOf(request.getParameter("msgType"));
 		int status = userInteractionService.insertUserMsg(uidFrom, uidTo, msg, msgType);
-		return ResponseJSON.getResponseJSON(status, null, null);
+		return StringUtil.getResponseJSON(status, null, null);
 	}
 	
 	@RequestMapping(value = { "/flow" }, method = { RequestMethod.POST }, produces = { "application/json" })
@@ -43,7 +43,7 @@ public class UserInteractionController {
 		Long uidFrom = Long.valueOf(request.getParameter("uidFrom"));
 		Long uidTo = Long.valueOf(request.getParameter("uidTo"));
 		int status = userInteractionService.flowUser(uidFrom, uidTo);
-		return ResponseJSON.getResponseJSON(status, null, null);
+		return StringUtil.getResponseJSON(status, null, null);
 	}
 	
 	@RequestMapping(value = { "/cancelflow" }, method = { RequestMethod.POST }, produces = { "application/json" })
@@ -53,15 +53,15 @@ public class UserInteractionController {
 		Long uidTo = Long.valueOf(request.getParameter("uidTo"));
 		
 		int status = userInteractionService.cancelFlowUser(uidFrom, uidTo);
-		return ResponseJSON.getResponseJSON(status, null, null);
+		return StringUtil.getResponseJSON(status, null, null);
 	}
 	
 	@RequestMapping(value = { "/tags" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
 	public JSONObject tags(HttpServletRequest request){
-		Long uid = Long.valueOf(request.getParameter("userID"));
+		Long uid = Long.valueOf(request.getParameter("userid"));
 		String[] tags = request.getParameter("tags").split("_");		
 		userInteractionService.insertTags(uid, tags);
-		return ResponseJSON.getResponseJSON(0, null, null);
+		return StringUtil.getResponseJSON(0, null, null);
 	}
 }

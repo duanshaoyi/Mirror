@@ -4,6 +4,7 @@
 package com.mirror.controller;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +25,7 @@ import com.mirror.entity.Resource.Image;
 import com.mirror.entity.Resource.Video;
 import com.mirror.entity.Resource.Work;
 import com.mirror.service.StreamService;
-import com.mirror.util.ResponseJSON;
+import com.mirror.util.StringUtil;
 
 /**
  * Controller for Resource operations
@@ -48,7 +49,7 @@ public class ResourceController {
 
 	@RequestMapping(value = { "/upload" }, method = { RequestMethod.POST })
 	@ResponseBody
-	public JSONObject work_upload(@RequestParam("name") String fileJson,
+	public JSONObject work_upload(HttpServletRequest request,
 			@RequestParam("file") MultipartFile file) {
 
 		int is_success = 0;
@@ -56,10 +57,11 @@ public class ResourceController {
 		try {
 
 			// 解析JSON数据
-			String fileJson_utf8 = java.net.URLDecoder
-					.decode(fileJson, "UTF-8");
-			JSONObject object = JSONObject.fromObject(fileJson_utf8);
+//			String fileJson_utf8 = java.net.URLDecoder
+//					.decode(fileJson, "UTF-8");
+//			JSONObject object = JSONObject.fromObject(fileJson_utf8);
 
+			String publishTime = String.valueOf(new Date().getTime());
 			// 上传数据
 			if (!file.isEmpty()) {// 判断是否为空
 
@@ -67,32 +69,34 @@ public class ResourceController {
 
 				Qiniu_Uploader qt = new Qiniu_Uploader();
 
-				String key = object.getString("Work_videokey");
+				String key = request.getParameter("Work_videokey");
+				String authorid = request.getParameter("authorid");
+				String fileKey = authorid + "/" + publishTime + "/" + key;
 //				String key = fileJson;
 
 				// 文件上传Qiniu uploader token
-				int upload_is_succ = qt.upload(bytes, key);
+				int upload_is_succ = qt.upload(bytes, fileKey);
 
 				if (upload_is_succ == 0) {//上传失败
-					return ResponseJSON.getResponseJSON(0, null, null);
+					return StringUtil.getResponseJSON(1, null, null);
 				}
 
 			} else {
 				// 上传失败
-				return ResponseJSON.getResponseJSON(0, null, null);
+				return StringUtil.getResponseJSON(1, null, null);
 			}
 
 			// parse work related info
-			Long author_id = Long.parseLong(object.getString("ID_Authorid"));
+			Long author_id = Long.parseLong(request.getParameter("ID_Authorid"));
 
-			String work_title = object.getString("Work_title");
-			String work_privacy = object.getString("Work_privacy");
-			String work_desc = object.getString("Work_desc");
-			String work_video_key = object.getString("Work_videokey");
-			String work_audio_key = object.getString("Work_audiokey");
-			String work_snapshot_key = object.getString("Work_snapshotkey");
-			String work_geolocation = object.getString("Work_geolocation");
-			String work_timestamp = object.getString("Work_publishtime");
+			String work_title = request.getParameter("Work_title");
+			String work_privacy = request.getParameter("Work_privacy");
+			String work_desc = request.getParameter("Work_desc");
+			String work_video_key = request.getParameter("Work_videokey");
+			String work_audio_key = request.getParameter("Work_audiokey");
+			String work_snapshot_key = request.getParameter("Work_snapshotkey");
+			String work_geolocation = request.getParameter("Work_geolocation");
+			String work_timestamp = publishTime;
 
 			// generate work
 			Work w = new Work(work_title, work_desc,
@@ -126,13 +130,13 @@ public class ResourceController {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return ResponseJSON.getResponseJSON(0, null, null);
+			return StringUtil.getResponseJSON(1, null, null);
 		}
 
-		return ResponseJSON.getResponseJSON(is_success, null, null);
+		return StringUtil.getResponseJSON(is_success, null, null);
 	}
 
-	@RequestMapping(value = { "/user_timeline" }, method = { RequestMethod.GET }, produces = { "application/json" })
+	@RequestMapping(value = { "/user_timeline" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
 	public JSONObject user_timeline(HttpServletRequest request) {
 		JSONArray Results_Json = new JSONArray();
@@ -155,10 +159,10 @@ public class ResourceController {
 			e.printStackTrace();
 		}
 
-		return ResponseJSON.getResponseJSON(0, null, Results_Json);
+		return StringUtil.getResponseJSON(0, null, Results_Json);
 	}
 
-	@RequestMapping(value = { "/recommd_timeline" }, method = { RequestMethod.GET }, produces = { "application/json" })
+	@RequestMapping(value = { "/recommd_timeline" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
 	public JSONObject recommd_timeline(HttpServletRequest request) {
 		JSONArray Results_Json = new JSONArray();
@@ -172,23 +176,22 @@ public class ResourceController {
 			int pageNo = Integer.parseInt(page_str);
 
 			Results_Json = streamservice.get_recomandtimeline(uid, pageNo);
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return ResponseJSON.getResponseJSON(0,null,Results_Json);
+		return StringUtil.getResponseJSON(0,null,Results_Json);
 	}
 	
-	@RequestMapping(value = { "/playVideo" }, method = { RequestMethod.POST }, produces = { "application/json" })
-	@ResponseBody
-	public String playVideo(HttpServletRequest request,@RequestParam("videoID") String videoID) {
-
-		Long video = Long.valueOf(request.getParameter("videoID"));
-		String v = request.getParameter("videoID");
-
-		return streamservice.findVideoURL(video);
-	}
+//	@RequestMapping(value = { "/playVideo" }, method = { RequestMethod.GET }, produces = { "application/json" })
+//	@ResponseBody
+//	public String playVideo(HttpServletRequest request,@RequestParam("videoID") String videoID) {
+//
+//		Long video = Long.valueOf(request.getParameter("videoID"));
+//		String v = request.getParameter("videoID");
+//
+//		return StringUtil.findVideoURL(video);
+//	}
 
 }

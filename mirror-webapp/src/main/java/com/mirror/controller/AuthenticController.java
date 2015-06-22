@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mirror.entity.User.User;
 import com.mirror.service.AuthService;
-import com.mirror.util.ResponseJSON;
+import com.mirror.service.StreamService;
+import com.mirror.util.StringUtil;
 
 
 /**
@@ -29,6 +32,9 @@ public class AuthenticController {
 	@Resource(name="AuthServiceImpl")
 	private AuthService authService;
 	
+	@Resource(name = "StreamServiceImpl")
+	private StreamService streamservice;
+	
 	@RequestMapping(value = { "/signup" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
 	public JSONObject signup(HttpServletRequest request){
@@ -41,7 +47,7 @@ public class AuthenticController {
 		String personalDesc = request.getParameter("personalDesc");
 		int status = authService.insertUser(nickname, password, email, locationID, 
 				locationName, iconName, personalDesc);
-		return ResponseJSON.getResponseJSON(status, null, null);
+		return StringUtil.getResponseJSON(status, null, null);
 	}
 	
 	@RequestMapping(value = { "/signin" }, method = { RequestMethod.POST }, produces = { "application/json" })
@@ -50,8 +56,20 @@ public class AuthenticController {
 		String nickname = request.getParameter("nickname");
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
-		int status = authService.signinUser(nickname, password, email);
-		return ResponseJSON.getResponseJSON(status, null, null);
+		User user = authService.signinUser(nickname, password, email);
+		if( null == user){
+			return StringUtil.getResponseJSON(1, null, null);
+		}
+		JSONArray jarray = streamservice.get_recomandtimeline(user.getID(), 1);
+		JSONObject userJSON = new JSONObject();
+		userJSON.put("nickname",user.getNickName());
+		userJSON.put("email",user.getEmail());
+		userJSON.put("userid",user.getID());
+		userJSON.put("personalDesc", user.getPersonalDesc());
+		userJSON.put("iconURL", user.getPlaceHolder1());
+		JSONObject obj = StringUtil.getResponseJSON(0, null, jarray);
+		obj.put("user", userJSON);
+		return obj;
 	}
 	
 	@RequestMapping(value = { "/modifypw" }, method = { RequestMethod.POST }, produces = { "application/json" })
@@ -61,7 +79,7 @@ public class AuthenticController {
 		String newPassword = request.getParameter("newPassword");
 		String email = request.getParameter("email");
 		int status = authService.modifyPassword(email, oldPassword, newPassword);
-		return ResponseJSON.getResponseJSON(status, null, null);
+		return StringUtil.getResponseJSON(status, null, null);
 	}
 	
 	@RequestMapping(value = { "/forgetpw" }, method = { RequestMethod.POST }, produces = { "application/json" })
@@ -81,7 +99,7 @@ public class AuthenticController {
 		String personalDesc = request.getParameter("personalDesc");
 		String iconName = request.getParameter("iconName");
 		int status = authService.modifyPersonalInfo(email, newNickname, personalDesc, iconName);
-		return ResponseJSON.getResponseJSON(status, null, null);
+		return StringUtil.getResponseJSON(status, null, null);
 	}
 	
 	public static void main(String[] args) {
@@ -89,7 +107,7 @@ public class AuthenticController {
 		a.put("status", 0);
 		a.put("errorReason", null);
 		a.put("data", null);
-		System.out.println(ResponseJSON.getResponseJSON(1, null, null));
+		System.out.println(StringUtil.getResponseJSON(1, null, null));
 		Date d = new Date();
 		System.out.println(d.getTime());
 		Timestamp aa = new Timestamp(new Date().getTime());

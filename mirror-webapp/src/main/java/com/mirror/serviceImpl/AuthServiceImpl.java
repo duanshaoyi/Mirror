@@ -5,11 +5,15 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONObject;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.mirror.Dao.UserDao;
 import com.mirror.entity.User.User;
 import com.mirror.service.AuthService;
+import com.qiniu.util.Auth;
 
 @Service("AuthServiceImpl")
 public class AuthServiceImpl extends BaseServiceImpl<User,Long> implements AuthService{
@@ -17,14 +21,10 @@ public class AuthServiceImpl extends BaseServiceImpl<User,Long> implements AuthS
 	@Resource(name="userDaoImpl")
 	private UserDao userDao;
 	
-	public UserDao getUserDao() {
-		return userDao;
-	}
-	@Resource(name="userDaoImpl")
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;
-	}
-
+	// 七牛域名
+	@Value("${qiniu.domain}")
+	private String domain;
+	
 	public int insertUser(String nickname, String password, String email, long locationID, 
 			String locationName, String iconName, String personalDesc){
 			
@@ -45,7 +45,7 @@ public class AuthServiceImpl extends BaseServiceImpl<User,Long> implements AuthS
 		return 0;
 	}
 	
-	public int signinUser(String nickname, String password, String email){
+	public User signinUser(String nickname, String password, String email){
 		
 		List<User> userList = new ArrayList<User>();
 		if(0 != userDao.findUserByNickname(nickname).size()){
@@ -53,13 +53,14 @@ public class AuthServiceImpl extends BaseServiceImpl<User,Long> implements AuthS
 		}else if(0 != userDao.findUserByEmail(email).size()){
 			userList = userDao.findUserByEmail(email);
 		}else{
-			return 1;
+			return null;
 		}
 		
 		if(!userList.get(0).getPassword().equals(password))
-			return 1;
-		
-		return 0;
+			return null;
+
+		userList.get(0).setPlaceHolder1(this.findDownloadIconURL(userList.get(0).getIconPath()));
+		return userList.get(0);
 	}
 	
 	public int modifyPassword(String email, String oldPassword, String newPassword){
@@ -101,5 +102,15 @@ public class AuthServiceImpl extends BaseServiceImpl<User,Long> implements AuthS
 		user.setIconPath(iconName);
 		userDao.merge(user);
 		return 0;
-	}	
+	}
+	
+	private String findDownloadIconURL(String fileKey) {
+
+		String ACCESS_KEY = "2RI_6FfJDyrXak6Z1LLR1uqIIarS3JEBRdvHVlNP";
+		String SECRET_KEY = "igdpaFrIWjkmBAfUGlxLMEfJLSGwLPe4Jj_LDmMR";
+		Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
+		String url = domain + fileKey;
+		String urlSigned = auth.privateDownloadUrl(url);
+		return urlSigned;
+	}
 }

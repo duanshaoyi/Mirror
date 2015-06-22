@@ -11,6 +11,4 @@ public interface StreamService {
 	
 	public JSONArray get_recomandtimeline(Long uid, int pageNo);
 	
-	//根据作品id获取播放视频地址
-	public String findVideoURL(Long id);
 }
