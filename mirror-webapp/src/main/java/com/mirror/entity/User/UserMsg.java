@@ -1,5 +1,6 @@
 package com.mirror.entity.User;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -11,7 +12,7 @@ import com.mirror.entity.BaseEntity;
 
 @Entity
 @Table(name = "user_msg")
-public class UserMsg  extends BaseEntity{
+public class UserMsg  extends BaseEntity implements Serializable{
 	/**
 	 * 
 	 */

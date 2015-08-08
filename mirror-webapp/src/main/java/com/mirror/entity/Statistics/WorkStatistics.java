@@ -1,5 +1,7 @@
 package com.mirror.entity.Statistics;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -9,7 +11,7 @@ import com.mirror.entity.BaseEntity;
 
 @Entity
 @Table(name = "statistics_work")
-public class WorkStatistics extends BaseEntity{
+public class WorkStatistics extends BaseEntity implements Serializable{
 
 	
 	/**

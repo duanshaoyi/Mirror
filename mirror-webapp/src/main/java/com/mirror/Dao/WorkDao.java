@@ -24,4 +24,6 @@ public interface WorkDao  extends BaseDao<Work, Long>{
 	List<Work> findBySpecifyIndex(List<Long> workids, int startoffset,int pageNo, int pageSize);
 	
 	int getRecomandStreamSize(List<Long> workids);
+	
+	List<Work> findAllWorkByUser(Long authorid);
 }

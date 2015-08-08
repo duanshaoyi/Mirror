@@ -12,6 +12,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import com.mirror.Dao.TagDao;
+import com.mirror.Dao.TagWorkDao;
 import com.mirror.Dao.UserDao;
 import com.mirror.Dao.UserWorkRelationDao;
 import com.mirror.Dao.UserUserRelationDao;
@@ -23,6 +24,7 @@ import com.mirror.entity.Relation.UserUser;
 import com.mirror.entity.Relation.UserWork;
 import com.mirror.entity.Resource.Work;
 import com.mirror.entity.User.User;
+import com.mirror.entity.tag.Tag;
 import com.mirror.service.StreamService;
 import com.mirror.util.StringUtil;
 
@@ -30,7 +32,6 @@ import com.mirror.util.StringUtil;
 public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 		StreamService {
 
-	// DAO层依赖注入
 	@Resource(name = "workDaoImpl")
 	private WorkDao workDao;
 
@@ -49,13 +50,19 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 	@Resource(name = "TagDaoImpl")
 	private TagDao tagDao;
 
+	@Resource(name = "tagWorkDaoImpl")
+	private TagWorkDao tagWorkDao;
+	
 	private final static int PageSize = 3;
 
 	/**
-	 * 请求一个特定作者的个人作品，以分页形式返回作品列表，每页作品最多五个作品 请求者uid @param uid 作者uid @param
-	 * authorid 页序数 @param pageNo
 	 * 
-	 * @return 作品信息，
+	 * @param uid
+	 *            当前用户id
+	 * @param authorid
+	 *            当前作品的作者id
+	 * 
+	 * @return 该作者作品list
 	 */
 	public JSONArray get_usertimeline(Long uid, Long authorid, int pageNo) {
 		JSONArray JSON = new JSONArray();
@@ -63,39 +70,56 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 		List<UserUser> usrusrllist = null;
 		List<UserWork> usrworkllist = null;
 
-		// 根据authorid 生成作者实体，用于查询
 		User author = new User();
 		author.setID(authorid);
 		// author.setEmail("email");
 
-		// 获得作者的作品集，以分页形式返回
-		worklist = workDao.findPageByUser(author, pageNo, PageSize);// 定义全局变量
+		worklist = workDao.findPageByUser(author, pageNo, PageSize);
 
-		// 获取请求者与当前作者关系(是否关注)
 		int usr_relation_status = useruserRelationDao.findstatusByuids(uid,
 				authorid);
 
-		// 获取请求者与作品间关系（是否收藏）
 		usrworkllist = userworkRelationDao.findFavoriteWorksbyUid(uid);
 
-		// 生成JSON
+		// JSON
 		JSON = genJSON_forWorkList(worklist, usr_relation_status, usrworkllist);
 
 		return JSON;
 	}
+	
+	//根据作者id，获取所有该作者work
+	public JSONArray getAllWorksByAuthor(Long uid, Long authorid){
+		JSONArray JSON = new JSONArray();
+		List<Work> worklist = null;
+		List<UserUser> usrusrllist = null;
+		List<UserWork> usrworkllist = null;
+
+
+		worklist = workDao.findAllWorkByUser(authorid);
+
+		int usr_relation_status = useruserRelationDao.findstatusByuids(uid,
+				authorid);
+
+		usrworkllist = userworkRelationDao.findFavoriteWorksbyUid(uid);
+
+		// JSON
+		JSON = genJSON_forWorkList(worklist, usr_relation_status, usrworkllist);
+
+		return JSON;
+	}
+
 
 	public JSONArray get_recomandtimeline(Long uid, int pageNo) {
 		List<Map_TagUser> mtulist = null;
 		List<Map_TagWork> mtwlist = null;
 		List<Work> worklist = null;
 
-		// 获得作者所对应的标签集合
 		mtulist = tagDao.findtagsbyUser(uid);
-		// 生成标签id集合
+
 		// if num of results equals 0 then return
-//		if (mtulist.size() == 0) {
-//			return null;
-//		}
+		// if (mtulist.size() == 0) {
+		// return null;
+		// }
 
 		List<Long> tagids = new ArrayList<Long>();
 		// String tagids="(0";
@@ -106,15 +130,13 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 			tagids.add(mtu_it.next().getTid());
 		}
 
-		// 获取一组tag所对应的作品集合
 		mtwlist = tagDao.findWorkstagsbyTagids(tagids);
-		// 生成work id集合
 		List<Long> workids = new ArrayList<Long>();
 
 		// if num of results equals 0 then return
-//		if (workids.size() == 0) {
-//			return null;
-//		}
+		// if (workids.size() == 0) {
+		// return null;
+		// }
 
 		Iterator<Map_TagWork> mtw_it = mtwlist.iterator();
 		while (mtw_it.hasNext()) {
@@ -127,36 +149,35 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 
 		double offset = RecomandworksSize % PageSize;
 
-		if (pageNo <= TotalRecomandPageSize) {// 获取推荐信息流
+		if (pageNo <= TotalRecomandPageSize) {
 
-			// 获取所推荐的worklist
 			worklist = workDao.findByIDs(workids, pageNo, PageSize);
 
 			// if num of results equals 0 then return 3 random works
 			if (0 < worklist.size() && worklist.size() < PageSize) {
 				int limit = (int) (PageSize - offset);
 
-				List<Work> supplement= workDao.findTopNByExcludeIDs(workids,limit);
-				
+				List<Work> supplement = workDao.findTopNByExcludeIDs(workids,
+						limit);
+
 				worklist.addAll(supplement);
-//				return null;
+				// return null;
 			}
-		} else {// 获取默认信息流
-			
-			int pageNoDefault=(int) (pageNo-TotalRecomandPageSize);
-			
-			worklist= workDao.findBySpecifyIndex(workids, (int)offset, pageNoDefault, PageSize);
+		} else {
+
+			int pageNoDefault = (int) (pageNo - TotalRecomandPageSize);
+
+			worklist = workDao.findBySpecifyIndex(workids, (int) offset,
+					pageNoDefault, PageSize);
 
 		}
 
-		// 生成JSON
 		return genJSON_forWorkList(worklist);
 	}
 
 	public int work_upload(Work w, Long authorid) {
 		int Res = 1;
 
-		// 设置作者
 		User author = userDao.find(authorid);
 		w.setUser(author);
 
@@ -166,7 +187,6 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 		// When the transaction ends, the flush will happen, and ID will be
 		// generated
 
-		// 插入成功
 		if (w.ID > 0) {
 			Res = 0;
 		}
@@ -175,7 +195,7 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 	}
 
 	/**
-	 * <b>function:</b>转换Java List集合到JSON 并附带好友及收藏关系
+	 * <b>function:</b>
 	 * 
 	 * @author
 	 * @createDate
@@ -192,13 +212,14 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 			Work work_current = it.next();
 			JSONObject object = new JSONObject();
 
+			object.element("workid", work_current.getID());
+			object.element("workPlayCount", work_current.getPlayCount());
 			object.element("Work_title", work_current.getTitle());
 			object.element("Work_privacy", work_current.getPrivacy());
 			object.element("Work_desc", work_current.getDesciption());
-			object.element("Work_videokey", StringUtil.findDownloadURL(work_current.getVideo()
-					.getFileKey()));
+			object.element("Work_videokey", StringUtil
+					.findDownloadURL(work_current.getVideo().getFileKey()));
 
-			// 应需求 取消音频与图片成员
 			// object.element("Work_audiokey",
 			// work_current.getAudio().getFileKey());
 			// object.element("Work_snapshotkey",
@@ -210,8 +231,11 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 			object.element("Work_author_id", work_current.getUser().getID());
 			object.element("Work_author_nickname", work_current.getUser()
 					.getNickName());
-			object.element("Work_author_avatar_key", StringUtil.findDownloadURL(work_current.getUser()
-					.getIconPath()));
+			object.element("Work_author_avatar_key", StringUtil
+					.findDownloadURL(work_current.getUser().getIconPath()));
+			object.element("thumbnailURL", StringUtil
+					.findWorkFrameDownloadURL(work_current.getVideo()
+							.getFileKey()));
 
 			arrayres.add(object);
 		}
@@ -222,14 +246,13 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 	}
 
 	/**
-	 * <b>function:</b>转换Java List集合到JSON
+	 * <b>function:</b>Java ListJSON
 	 * 
 	 * @author
 	 * @createDate
 	 */
 	public JSONArray genJSON_forWorkList(List<Work> worklist,
 			int usr_relation_status, List<UserWork> usrworklist) {
-
 
 		JSONArray arrayres = new JSONArray();
 		// JSONres = JSONArray.fromObject(worklist).toString();
@@ -239,11 +262,16 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 			Work work_current = it.next();
 			JSONObject object = new JSONObject();
 
+			object.element("workid", work_current.getID());
+			object.element("workPlayCount", work_current.getPlayCount());
 			object.element("Work_title", work_current.getTitle());
 			object.element("Work_privacy", work_current.getPrivacy());
 			object.element("Work_desc", work_current.getDesciption());
-			object.element("Work_videokey", StringUtil.findDownloadURL(work_current.getVideo()
-					.getFileKey()));
+			object.element("Work_videokey", StringUtil
+					.findDownloadURL(work_current.getVideo().getFileKey()));
+			object.element("thumbnailURL", StringUtil
+					.findWorkFrameDownloadURL(work_current.getVideo()
+							.getFileKey()));
 			// object.element("Work_audiokey", work_current.getAudio()
 			// .getFileKey());
 			// object.element("Work_snapshotkey", work_current.getSnapshot()
@@ -257,10 +285,8 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 			object.element("Work_author_avatar_key", work_current.getUser()
 					.getIconPath());
 
-			// 请求者与作者间的关系
 			object.element("Author_relation_status", usr_relation_status);
 
-			// 是否收藏当前作品
 			boolean isfavorite = false;
 			if (usrworklist.contains(work_current)) {
 				isfavorite = true;
@@ -275,16 +301,48 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 		return arrayres;
 	}
 
-//	public String findVideoURL(Long id) {
-//		Video video = videoDao.find(id);
-//		if (video == null)
-//			return "1";
-//		Auth auth = Auth.create(this.ACCESS_KEY, this.SECRET_KEY);
-//		// String token = auth.uploadToken("demomy");
-//		String url = domain + video.getFileKey();
-//		String urlSigned = auth.privateDownloadUrl(url);
-//		return urlSigned;
-//	}
+	// public String findVideoURL(Long id) {
+	// Video video = videoDao.find(id);
+	// if (video == null)
+	// return "1";
+	// Auth auth = Auth.create(this.ACCESS_KEY, this.SECRET_KEY);
+	// // String token = auth.uploadToken("demomy");
+	// String url = domain + video.getFileKey();
+	// String urlSigned = auth.privateDownloadUrl(url);
+	// return urlSigned;
+	// }
+
+	public JSONArray getAllTagsService() {
+		JSONArray tagsArray = new JSONArray();
+		List<Tag> tagList = tagDao.findAllTags();
+		for (int i = 0; i < tagList.size(); i++) {
+			JSONObject tagObject = new JSONObject();
+			tagObject.put("tagid", tagList.get(i).getID());
+			tagObject.put("content", tagList.get(i).getContent());
+			tagsArray.add(tagObject);
+		}
+		return tagsArray;
+	}
 	
+	public void updateCurrentWorkPlayCount(Long currentWorkid, Integer playCount){
+		Work currentWork = workDao.find(currentWorkid);
+		currentWork.setPlayCount(currentWork.getPlayCount()+playCount);
+		workDao.merge(currentWork);
+	}
 	
+	public String getNextWorkPlayCount(Long nextWorkid){
+		
+		return String.valueOf(workDao.find(nextWorkid).getPlayCount());
+	}
+	
+	@Override
+	public void insertTags(Long wid, String[] tags){
+		
+		for(int i = 0; i < tags.length; i++){
+			Map_TagWork tagWork = new Map_TagWork();
+			tagWork.setWid(wid);
+			tagWork.setTid(Long.valueOf(tags[i]));
+			tagWorkDao.persist(tagWork);
+		}
+	}
 }

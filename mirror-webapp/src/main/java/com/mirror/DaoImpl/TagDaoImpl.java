@@ -17,20 +17,17 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 @Repository("TagDaoImpl")
-@Transactional
 public class TagDaoImpl extends BaseDaoImpl<Tag, Long> implements TagDao {
 
-	//获得所属于某个用户的标签关系集合
 	@SuppressWarnings("unchecked")
-	public List<Map_TagUser> findtagsbyUser(Long uid){
-		
-		String jpql="select mtu from Map_TagUser mtu where mtu.uid=:uid";
-		
+	public List<Map_TagUser> findtagsbyUser(Long uid) {
+
+		String jpql = "select mtu from Map_TagUser mtu where mtu.uid=:uid";
+
 		return entityManager.createQuery(jpql).setParameter("uid", uid)
-		.getResultList();
+				.getResultList();
 	}
-	
-	//根据标签id集合获取对应的作品id集合
+
 	@SuppressWarnings("unchecked")
 	public List<Map_TagWork> findWorkstagsbyTagids(List<Long> tagids) {
 		String jpql = "select mtw from Map_TagWork mtw where mtw.tid IN (:tagids)";
@@ -38,14 +35,19 @@ public class TagDaoImpl extends BaseDaoImpl<Tag, Long> implements TagDao {
 		return entityManager.createQuery(jpql).setParameter("tagids", tagids)
 				.getResultList();
 	}
-	
-	//获得所属于某个作品的标签关系集合
+
 	@SuppressWarnings("unchecked")
-	public List<Map_TagWork> findtagsbyWork(Long wid){
-		String jpql="select mtw from Map_TagWork mtw where mtw.wid=:wid";
-		
+	public List<Map_TagWork> findtagsbyWork(Long wid) {
+		String jpql = "select mtw from Map_TagWork mtw where mtw.wid=:wid";
+
 		return entityManager.createQuery(jpql).setParameter("wid", wid)
-		.getResultList();
+				.getResultList();
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	public List<Tag> findAllTags(){
+		String sql = "select * from tags";
+		List<Tag> tagList = this.entityManager.createNativeQuery(sql,Tag.class).getResultList();
+		return tagList;
+	}
 }

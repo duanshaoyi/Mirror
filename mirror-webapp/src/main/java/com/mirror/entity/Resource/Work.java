@@ -1,9 +1,12 @@
 package com.mirror.entity.Resource;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -16,66 +19,66 @@ import com.mirror.entity.User.User;
 
 @Entity
 @Table(name = "resource_work")
-public class Work extends BaseEntity {
+public class Work extends BaseEntity implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7121573434953462455L;
 
-	// //上传用户uid
-	// @Column(name="uid")
-	// private Long uid;
-
+	//作者id
 	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "uid")
 	private User user;
 
-	// 作品标题
+	//作品标题
 	@Column(name = "title")
 	private String title;
 
-	// 作品描述
+	//作品描述
 	@Column(name = "description")
 	private String desciption;
 
-	// 作品标签
+	//作品标签
 	@Column(name = "tags")
 	private String tags;
 
-	// 作品视频实体
-	@OneToOne(targetEntity = Video.class)
-	@JoinColumn(name = "video_id", unique = true)
+	//视频
+	@OneToOne(targetEntity = Video.class, cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@JoinColumn(name = "video_id", unique = true, nullable=true)
 	private Video video;
 
-	// 作品视频实体
-	@OneToOne(targetEntity = Audio.class)
-	@JoinColumn(name = "audio_id", unique = true)
+	@OneToOne(targetEntity = Audio.class,cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@JoinColumn(name = "audio_id", unique = true, nullable=true)
 	private Audio audio;
 
-	// 作品视频实体
-	@OneToOne(targetEntity = Image.class)
-	@JoinColumn(name = "snapshot_id", unique = true)
+	@OneToOne(targetEntity = Image.class,cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@JoinColumn(name = "snapshot_id", unique = true, nullable=true)
 	private Image snapshot;
 
-	// 上传时间
+	//上传时间
 	@Column(name = "uploadtime", insertable = true)
 	private Timestamp uploadTime;
 
-	// 作品权限 public/private/friend
+	// public/private/friend
 	@Column(name = "privacy")
 	private String privacy;
 
-	// 作品能否评论
+	//
 	@Column(name = "canReply")
 	private boolean canReply = true;
 
-	// 作品状态
+	//
 	@Column(name = "status")
 	private int status = 1;
 
+	//作品录制坐标
 	@Column(name = "geolocation")
 	private String geolocation;
 
+	//作品播放次数
+	@Column(name = "play_count")
+	private Long playCount = 0L;
+	
 	@Column(name = "placeHolder2")
 	private String placeHolder2;
 
@@ -227,6 +230,14 @@ public class Work extends BaseEntity {
 
 	public void setGeolocation(String geolocation) {
 		this.geolocation = geolocation;
+	}
+	
+	public Long getPlayCount() {
+		return playCount;
+	}
+
+	public void setPlayCount(Long playCount) {
+		this.playCount = playCount;
 	}
 
 	// Work

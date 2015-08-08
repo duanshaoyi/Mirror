@@ -2,6 +2,7 @@ package com.mirror.controller;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ import com.mirror.util.StringUtil;
 /**
  * 
  * @author GXM
- * 用户鉴权模块，控制登录，修改信息等
+ * 用户个人基本操作
  */
 @RestController
 @RequestMapping("/auth")
@@ -112,5 +113,7 @@ public class AuthenticController {
 		System.out.println(d.getTime());
 		Timestamp aa = new Timestamp(new Date().getTime());
 		System.out.println(aa);
+		UUID uuid = UUID.randomUUID();
+		System.out.println("uuid=" + uuid);
 	}
 }

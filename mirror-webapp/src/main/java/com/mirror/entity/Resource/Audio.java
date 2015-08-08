@@ -1,5 +1,6 @@
 package com.mirror.entity.Resource;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -12,7 +13,7 @@ import com.mirror.entity.BaseEntity;
 
 @Entity
 @Table(name = "resource_audios")
-public class Audio extends BaseEntity {
+public class Audio extends BaseEntity implements Serializable{
 
 	/**
 	 * 

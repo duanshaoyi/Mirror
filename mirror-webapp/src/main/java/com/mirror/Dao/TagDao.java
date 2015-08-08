@@ -10,13 +10,15 @@ import com.mirror.entity.Resource.Work;
 
 public interface TagDao extends BaseDao<Tag, Long>{
     
-	//è·å¾—æ‰€å±äºæŸä¸ªç”¨æˆ·çš„æ ‡ç­¾å…³ç³»é›†åˆ
+	//¸ù¾İuserid²éÕÒ¶ÔÓ¦tags
 	List<Map_TagUser> findtagsbyUser(Long uid);
 	
-	//è·å¾—æ‰€å±äºæŸä¸ªä½œå“çš„æ ‡ç­¾å…³ç³»é›†åˆ
+	//¸ù¾İworkid²éÕÒ¶ÔÓ¦tags
 	List<Map_TagWork> findtagsbyWork(Long wid);
 	
-	//æ ¹æ®æ ‡ç­¾idé›†åˆè·å–å¯¹åº”çš„ä½œå“idé›†åˆ
+	//¸ù¾İtagµÄid²éÕÒ¹ØÏµ
 	List<Map_TagWork> findWorkstagsbyTagids(List<Long> tagids);
 	
+	//»ñÈ¡ËùÓĞ±êÇ©
+	List<Tag> findAllTags();
 }

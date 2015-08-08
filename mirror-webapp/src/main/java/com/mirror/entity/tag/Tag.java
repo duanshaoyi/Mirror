@@ -1,6 +1,8 @@
 package com.mirror.entity.tag;
 
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
@@ -13,7 +15,7 @@ import com.mirror.entity.BaseEntity;
 
 @Entity
 @Table(name = "tags")
-public class Tag extends BaseEntity{
+public class Tag extends BaseEntity implements Serializable{
 	
 	/**
 	 * 
@@ -44,4 +46,21 @@ public class Tag extends BaseEntity{
 		this.catogory = catogory;
 	}
 
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getCatogory() {
+		return catogory;
+	}
+
+	public void setCatogory(String catogory) {
+		this.catogory = catogory;
+	}
+
+	
 }

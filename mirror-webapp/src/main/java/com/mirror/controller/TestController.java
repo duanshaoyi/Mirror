@@ -27,6 +27,7 @@ import org.springframework.web.servlet.support.RequestContext;
 
 import com.mirror.entity.User.User;
 import com.mirror.service.TestService;
+import com.mirror.util.StringUtil;
 
 @RestController
 @RequestMapping("/test")
@@ -146,5 +147,13 @@ public class TestController {
 	        }
 	        return "globaltest";
 	    }
-	 
+	
+	public static void main(String[] args) {
+		String url = StringUtil.findWorkFrameDownloadURL("4/1434297069537/2.m4v");
+		System.out.println(url);
+		String a = "1_2_3";
+		String []b = null;
+		b = a.split("_");
+		System.out.println(b[1]);
+	}
 }

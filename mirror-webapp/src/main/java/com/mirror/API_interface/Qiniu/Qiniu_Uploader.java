@@ -5,6 +5,7 @@ package com.mirror.API_interface.Qiniu;
 
 import java.io.File;
 
+import com.mirror.util.StringUtil;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.UploadManager;
@@ -12,7 +13,7 @@ import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 
 /**
- * @author ShaoyiDuan 七牛API测试
+ * @author ShaoyiDuan
  */
 public class Qiniu_Uploader {
 
@@ -34,17 +35,14 @@ public class Qiniu_Uploader {
 		return SECRET_KEY;
 	}
 
-	// 简单上传，使用默认策略
 	private String getUpToken0() {
 		return auth.uploadToken("demomy");
 	}
 
-	// 覆盖上传
 	private String getUpToken1() {
 		return auth.uploadToken("bucket", "key");
 	}
 
-	// 设置指定上传策略
 	private String getUpToken2() {
 		return auth.uploadToken(
 				"bucket",
@@ -55,10 +53,9 @@ public class Qiniu_Uploader {
 						.put("callbackBody", "key=$(key)&hash=$(etag)"));
 	}
 
-	// 设置预处理、去除非限定的策略字段
-	private String getUpToken3() {
+	private String getUpToken3(String fileName) {
 		return auth.uploadToken(
-				"bucket",
+				"demomy",
 				null,
 				3600,
 				new StringMap().putNotEmpty("persistentOps", "")
@@ -66,11 +63,11 @@ public class Qiniu_Uploader {
 						.putNotEmpty("persistentPipeline", ""), true);
 	}
 
-	// 上传内存中数据
 	public int upload(byte[] data, String key) {
 		try {
 			
-			String upToken=getUpToken0();
+//			String upToken=getUpToken0();
+			String upToken=getUpToken3(key);
 			Response res = uploadManager.put(data, key, upToken);
 			// log.info(res);
 			// log.info(res.bodyString());
@@ -82,10 +79,8 @@ public class Qiniu_Uploader {
 			}
 		} catch (QiniuException e) {
 			Response r = e.response;
-			// 请求失败时简单状态信息
 			System.out.println(r.toString());
 			try {
-				// 响应的文本信息
 				System.out.println(r.bodyString());
 			} catch (QiniuException e1) {
 				return 0;
@@ -104,10 +99,8 @@ public class Qiniu_Uploader {
 			System.out.println(res.bodyString());
 		} catch (QiniuException e) {
 			Response r = e.response;
-			// 请求失败时简单状态信息
 			System.out.println(r.toString());
 			try {
-				// 响应的文本信息
 				System.out.println(r.bodyString());
 			} catch (QiniuException e1) {
 				// ignore
@@ -127,8 +120,7 @@ public class Qiniu_Uploader {
 		Qiniu_Uploader qt=new Qiniu_Uploader();
 		
 		qt.uploadFile(image);
-		
-		
+				
 	}
 
 }

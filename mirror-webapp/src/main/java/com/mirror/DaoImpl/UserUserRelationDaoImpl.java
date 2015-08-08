@@ -10,7 +10,6 @@ import com.mirror.Dao.UserUserRelationDao;
 import com.mirror.entity.Relation.UserUser;
 
 @Repository("userUserRelationDaoImpl")
-@Transactional
 public class UserUserRelationDaoImpl extends BaseDaoImpl<UserUser, Long>
 		implements UserUserRelationDao {
 
@@ -49,7 +48,6 @@ public class UserUserRelationDaoImpl extends BaseDaoImpl<UserUser, Long>
 		return uurl;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public int findstatusByuids(Long uidFrom, Long uidTo) {
 

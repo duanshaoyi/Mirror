@@ -45,6 +45,13 @@ public class WorkDaoImpl extends BaseDaoImpl<Work, Long> implements WorkDao{
 		.setMaxResults(pageSize)
 		.getResultList();
 	}
+	
+	//
+	@SuppressWarnings("unchecked")
+	public List<Work> findAllWorkByUser(Long authorid) {
+		String sql="select * from resource_work w where w.uid=:authorid";
+		return entityManager.createNativeQuery(sql, Work.class).setParameter("authorid", authorid).getResultList();
+	}
 
 
 	/**

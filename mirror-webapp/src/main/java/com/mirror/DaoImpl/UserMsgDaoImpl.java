@@ -10,7 +10,6 @@ import com.mirror.Dao.UserMsgDao;
 import com.mirror.entity.User.UserMsg;
 
 @Repository("userMsgDaoImpl")
-@Transactional
 public class UserMsgDaoImpl extends BaseDaoImpl<UserMsg, Long> implements UserMsgDao{
 
 	public List<UserMsg> findUserMsgByUserID(String sendUid, String recieveUid){

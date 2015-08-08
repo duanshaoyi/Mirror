@@ -20,8 +20,8 @@ public class UserWorkRelationDaoImpl extends BaseDaoImpl<UserWork, Long> impleme
 	public List<UserWork> findFavoriteWorksbyUid(Long uid){
 		List<UserWork> relations=null;
 		
-	    String jpql="select uw from UserWork uw where uw.uid=:uid";					
-		// 创建查询
+	    String jpql="select uw from UserWork uw where uw.uid=:uid";			
+	    
 		relations = entityManager.createQuery(jpql).setParameter("uid", uid)
 				.getResultList();
 

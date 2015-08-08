@@ -1,5 +1,8 @@
 package com.mirror.service;
 
+import javax.transaction.Transactional;
+
+@Transactional
 public interface UserInteractionService {
 
 	//ÃÌº”ÀΩ–≈

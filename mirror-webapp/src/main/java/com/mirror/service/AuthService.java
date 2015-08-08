@@ -1,9 +1,10 @@
 package com.mirror.service;
 
-import net.sf.json.JSONObject;
+import javax.transaction.Transactional;
 
 import com.mirror.entity.User.User;
 
+@Transactional
 public interface AuthService extends BaseService<User, Long>{
 	
 	public int insertUser(String nickname, String password, String email, long locationID, 

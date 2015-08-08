@@ -25,13 +25,14 @@
    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
    
    <!-- 数据库映射 -->
+   <!-- 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
       <property name="driverClassName" value="com.mysql.jdbc.Driver" />
       <property name="url" value="jdbc:mysql://localhost:3306/mirror" />
       <property name="username" value="root" />
       <property name="password" value="root" />
    </bean>
-   
+   -->
    <!-- JPA 实体管理工厂 -->  
     <bean id="entityManagerFactory"  
         class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">  
@@ -52,7 +53,7 @@
        <!--  <property name="dataSource" ref="dataSource" />   -->
         <property name="entityManagerFactory" ref="entityManagerFactory" />  
     </bean>
-         
+          
    <!--  声明式容器事务管理 ,transaction-manager指定事务管理器为transactionManager -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
@@ -63,10 +64,16 @@
             <tx:method name="update*" propagation="REQUIRED" />
             <tx:method name="delete*" propagation="REQUIRED" />
             <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="sign*" propagation="REQUIRED" />
+            <tx:method name="flow*" propagation="REQUIRED" />
+            <tx:method name="cancel*" propagation="REQUIRED" />
+            <tx:method name="modify*" propagation="REQUIRED" />
+            <tx:method name="reset*" propagation="REQUIRED" />
+            <tx:method name="work*" propagation="REQUIRED" />
             <tx:method name="*" read-only="true" />
         </tx:attributes>
     </tx:advice>
-    
+    <tx:annotation-driven transaction-manager="transactionManager"/>
     <aop:config expose-proxy="true">
         <!-- 只对业务逻辑层实施事务 -->
         <aop:pointcut id="txPointcut" expression="execution(* com.mirror.service..*.*(..))" />

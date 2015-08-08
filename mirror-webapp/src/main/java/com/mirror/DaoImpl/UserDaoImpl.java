@@ -12,7 +12,6 @@ import com.mirror.entity.User.User;
 
 
 @Repository("userDaoImpl")
-@Transactional
 public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao {
 
 	@Override

@@ -1,5 +1,6 @@
 package com.mirror.entity.User;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -13,7 +14,7 @@ import com.mirror.entity.BaseEntity;
 
 @Entity
 @Table(name = "user_comment")
-public class UserComment  extends BaseEntity{
+public class UserComment  extends BaseEntity implements Serializable{
 
 	/**
 	 * 

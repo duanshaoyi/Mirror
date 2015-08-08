@@ -20,7 +20,7 @@ public class Map_TagWork extends BaseEntity {
 	private Long tid;
 
 	@Column(name="weight",length=20) 
-	private Double weight;
+	private Double weight = 50.0;
 	
 	public Map_TagWork(){}
 	
@@ -29,6 +29,12 @@ public class Map_TagWork extends BaseEntity {
 		this.wid = wid;
 		this.tid = tid;
 		this.weight = weight;
+	}
+	
+	public Map_TagWork(Long wid, Long tid) {
+		super();
+		this.wid = wid;
+		this.tid = tid;
 	}
 
 	public Long getWid() {

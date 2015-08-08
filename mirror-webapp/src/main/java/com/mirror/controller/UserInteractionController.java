@@ -16,7 +16,7 @@ import com.mirror.util.StringUtil;
 /**
  * 
  * @author GXM
- * ç”¨æˆ·ä¸Žç”¨æˆ·ä¹‹é—´äº¤äº’
+ * Interaction user and user
  */
 @RestController
 @RequestMapping("/user")
@@ -25,6 +25,7 @@ public class UserInteractionController {
 	@Resource(name="userInteractionServiceImpl")
 	private UserInteractionService userInteractionService;
 	
+	//·¢ËÍË½ÐÅ
 	@RequestMapping(value = { "/sendmsg" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
 	public JSONObject sendMsg(HttpServletRequest request){
@@ -37,6 +38,7 @@ public class UserInteractionController {
 		return StringUtil.getResponseJSON(status, null, null);
 	}
 	
+	//¹Ø×¢
 	@RequestMapping(value = { "/flow" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
 	public JSONObject flow(HttpServletRequest request){
@@ -46,6 +48,7 @@ public class UserInteractionController {
 		return StringUtil.getResponseJSON(status, null, null);
 	}
 	
+	//È¡Ïû¹Ø×¢
 	@RequestMapping(value = { "/cancelflow" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
 	public JSONObject cancelflow(HttpServletRequest request){
@@ -56,6 +59,7 @@ public class UserInteractionController {
 		return StringUtil.getResponseJSON(status, null, null);
 	}
 	
+	//ÓÃ»§´ò±êÇ©
 	@RequestMapping(value = { "/tags" }, method = { RequestMethod.POST }, produces = { "application/json" })
 	@ResponseBody
 	public JSONObject tags(HttpServletRequest request){

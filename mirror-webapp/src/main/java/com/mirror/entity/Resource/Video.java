@@ -1,5 +1,6 @@
 package com.mirror.entity.Resource;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -12,7 +13,7 @@ import com.mirror.entity.BaseEntity;
 
 @Entity
 @Table(name = "resource_videos")
-public class Video extends BaseEntity {
+public class Video extends BaseEntity implements Serializable{
 	/**
 	 * 
 	 */
