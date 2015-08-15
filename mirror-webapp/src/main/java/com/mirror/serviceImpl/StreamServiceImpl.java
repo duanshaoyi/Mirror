@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -22,12 +23,14 @@ import com.mirror.entity.Relation.Map_TagUser;
 import com.mirror.entity.Relation.Map_TagWork;
 import com.mirror.entity.Relation.UserUser;
 import com.mirror.entity.Relation.UserWork;
+import com.mirror.entity.Resource.Video;
 import com.mirror.entity.Resource.Work;
 import com.mirror.entity.User.User;
 import com.mirror.entity.tag.Tag;
 import com.mirror.service.StreamService;
 import com.mirror.util.StringUtil;
 
+@Transactional
 @Service("StreamServiceImpl")
 public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 		StreamService {
@@ -175,7 +178,7 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 		return genJSON_forWorkList(worklist);
 	}
 
-	public int work_upload(Work w, Long authorid) {
+	public int work_upload(Work w, Long authorid , String []tagids) {
 		int Res = 1;
 
 		User author = userDao.find(authorid);
@@ -191,6 +194,10 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 			Res = 0;
 		}
 
+		for(int i = 0 ; i < tagids.length ; i++){
+			Map_TagWork tagWork = new Map_TagWork(w.getID(),Long.valueOf(tagids[i]));
+			this.tagWorkDao.persist(tagWork);
+		}
 		return Res;
 	}
 
@@ -344,5 +351,14 @@ public class StreamServiceImpl extends BaseServiceImpl<Work, Long> implements
 			tagWork.setTid(Long.valueOf(tags[i]));
 			tagWorkDao.persist(tagWork);
 		}
+	}
+	
+	@Override
+	public void deleteWork(Long wid){
+		Work w = new Work();
+		w = this.workDao.find(wid);
+		this.workDao.deleteWorkByID(wid);
+		this.videoDao.deleteVideoByID(w.getVideo().getID());
+		this.tagWorkDao.deleteTagWorkByWorkid(wid);
 	}
 }

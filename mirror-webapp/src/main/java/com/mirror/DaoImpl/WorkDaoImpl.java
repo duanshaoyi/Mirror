@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.mirror.Dao.WorkDao;
+import com.mirror.entity.Resource.Video;
 import com.mirror.entity.Resource.Work;
 import com.mirror.entity.User.User;
 
@@ -49,7 +50,7 @@ public class WorkDaoImpl extends BaseDaoImpl<Work, Long> implements WorkDao{
 	//
 	@SuppressWarnings("unchecked")
 	public List<Work> findAllWorkByUser(Long authorid) {
-		String sql="select * from resource_work w where w.uid=:authorid";
+		String sql="select * from resource_work w where w.uid=:authorid order by w.create_at desc";
 		return entityManager.createNativeQuery(sql, Work.class).setParameter("authorid", authorid).getResultList();
 	}
 
@@ -149,5 +150,10 @@ public class WorkDaoImpl extends BaseDaoImpl<Work, Long> implements WorkDao{
 		size = entityManager.createQuery(jpql).setParameter("workids", workids).getResultList().size();
 	 
 		return size;
+	}
+	
+	public void deleteWorkByID(Long ID){
+		String sql = "delete from resource_work where ID=:ID";
+		this.entityManager.createNativeQuery(sql, Video.class).setParameter("ID", ID).executeUpdate();
 	}
 }

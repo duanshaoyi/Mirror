@@ -26,4 +26,6 @@ public interface WorkDao  extends BaseDao<Work, Long>{
 	int getRecomandStreamSize(List<Long> workids);
 	
 	List<Work> findAllWorkByUser(Long authorid);
+	
+	public void deleteWorkByID(Long ID);
 }

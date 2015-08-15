@@ -47,11 +47,11 @@ public class Work extends BaseEntity implements Serializable{
 	@JoinColumn(name = "video_id", unique = true, nullable=true)
 	private Video video;
 
-	@OneToOne(targetEntity = Audio.class,cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+//	@OneToOne(targetEntity = Audio.class,cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name = "audio_id", unique = true, nullable=true)
 	private Audio audio;
 
-	@OneToOne(targetEntity = Image.class,cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+//	@OneToOne(targetEntity = Image.class,cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name = "snapshot_id", unique = true, nullable=true)
 	private Image snapshot;
 

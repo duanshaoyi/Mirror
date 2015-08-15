@@ -26,6 +26,7 @@ import com.mirror.entity.Resource.Video;
 import com.mirror.entity.Resource.Work;
 import com.mirror.service.StreamService;
 import com.mirror.util.StringUtil;
+import com.qiniu.common.QiniuException;
 
 /**
  * Controller for Resource operations
@@ -91,6 +92,7 @@ public class ResourceController {
 			String work_audio_key = request.getParameter("Work_audiokey");
 			String work_snapshot_key = request.getParameter("Work_snapshotkey");
 			String work_geolocation = request.getParameter("Work_geolocation");
+			String []tagids = request.getParameter("tags").split("_");
 
 			// generate work
 			Work w = new Work(work_title, work_desc,
@@ -119,7 +121,7 @@ public class ResourceController {
 				w.setSnapshot(snapshot);
 			}
 
-			is_success = streamservice.work_upload(w, author_id);
+			is_success = streamservice.work_upload(w, author_id, tagids);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -238,12 +240,32 @@ public class ResourceController {
 	}
 	
 	//用户打标签
-		@RequestMapping(value = { "/tags" }, method = { RequestMethod.POST }, produces = { "application/json" })
-		@ResponseBody
-		public JSONObject tags(HttpServletRequest request){
-			Long wid = Long.valueOf(request.getParameter("workid"));
-			String[] tags = request.getParameter("tags").split("_");		
-			streamservice.insertTags(wid, tags);
-			return StringUtil.getResponseJSON(0, null, null);
+	@RequestMapping(value = { "/tags" }, method = { RequestMethod.POST }, produces = { "application/json" })
+	@ResponseBody
+	public JSONObject tags(HttpServletRequest request){
+		Long wid = Long.valueOf(request.getParameter("workid"));
+		String[] tags = request.getParameter("tags").split("_");		
+		streamservice.insertTags(wid, tags);
+		return StringUtil.getResponseJSON(0, null, null);
+	}
+	
+	//用户删除资源
+	@RequestMapping(value = { "/deleteWork" }, method = { RequestMethod.POST }, produces = { "application/json" })
+	@ResponseBody
+	public JSONObject deleteWork(HttpServletRequest request){
+		//Work_videokey作品视频在七牛上的文件名
+		String workKey = request.getParameter("Work_videokey");
+		Long wid = Long.valueOf(request.getParameter("workid"));
+		Qiniu_Uploader qt = new Qiniu_Uploader();
+		try {
+			qt.deleteWork(workKey);
+			this.streamservice.deleteWork(wid);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return StringUtil.getResponseJSON(1, null, null);
 		}
+		return StringUtil.getResponseJSON(0, null, null);
+	}
+	
 }

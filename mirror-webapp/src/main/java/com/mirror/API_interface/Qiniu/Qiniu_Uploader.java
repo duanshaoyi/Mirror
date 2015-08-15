@@ -8,6 +8,7 @@ import java.io.File;
 import com.mirror.util.StringUtil;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
+import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
@@ -17,14 +18,17 @@ import com.qiniu.util.StringMap;
  */
 public class Qiniu_Uploader {
 
-	private String ACCESS_KEY = "2RI_6FfJDyrXak6Z1LLR1uqIIarS3JEBRdvHVlNP";
-	private String SECRET_KEY = "igdpaFrIWjkmBAfUGlxLMEfJLSGwLPe4Jj_LDmMR";
+	private static final String ACCESS_KEY = "2RI_6FfJDyrXak6Z1LLR1uqIIarS3JEBRdvHVlNP";
+	private static final String SECRET_KEY = "igdpaFrIWjkmBAfUGlxLMEfJLSGwLPe4Jj_LDmMR";
+	private static final String BUCKET = "demomy";
 
 	private UploadManager uploadManager = new UploadManager();
 	private Auth auth = null;
+	private BucketManager bucketManager = null;
 
 	public Qiniu_Uploader() {
 		this.auth = Auth.create(ACCESS_KEY, SECRET_KEY);
+		this.bucketManager = new BucketManager(this.auth);
 	}
 
 	public String getAK() {
@@ -108,6 +112,10 @@ public class Qiniu_Uploader {
 		}
 	}//upload file
 
+	//É¾³ýÆßÅ£´æ´¢µÄÎÄ¼þ
+	public void	deleteWork(String key) throws QiniuException{
+		this.bucketManager.delete(this.BUCKET, key);
+	}
 	/**for test
 	 * @param args
 	 */

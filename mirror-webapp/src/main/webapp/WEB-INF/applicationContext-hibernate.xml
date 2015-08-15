@@ -70,6 +70,7 @@
             <tx:method name="modify*" propagation="REQUIRED" />
             <tx:method name="reset*" propagation="REQUIRED" />
             <tx:method name="work*" propagation="REQUIRED" />
+            <tx:method name="remove*" propagation="REQUIRED" />
             <tx:method name="*" read-only="true" />
         </tx:attributes>
     </tx:advice>

@@ -18,4 +18,9 @@ public class VideoDaoImpl extends BaseDaoImpl<Video, Long> implements VideoDao{
 		String sql = "select * from Video v where v.uid=:uid and v.wid=:vid";
 		return null;
 	}
+	
+	public void deleteVideoByID(Long ID){
+		String sql = "delete from resource_videos where ID=:ID";
+		this.entityManager.createNativeQuery(sql, Video.class).setParameter("ID", ID).executeUpdate();
+	}
 }
