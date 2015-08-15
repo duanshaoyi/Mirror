@@ -9,7 +9,7 @@ import com.mirror.entity.User.User;
 
 @Transactional
 public interface StreamService {
-	int work_upload(Work w, Long authorid);
+	int work_upload(Work w, Long authorid, String []tagids);
 
 	public JSONArray get_usertimeline(Long uid, Long authorid, int pageNo);
 	
@@ -24,4 +24,6 @@ public interface StreamService {
 	public JSONArray getAllWorksByAuthor(Long uid , Long authorid);
 	
 	public void insertTags(Long wid, String[] tags);
+	
+	public void deleteWork(Long wid);
 }
